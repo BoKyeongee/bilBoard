@@ -14,6 +14,13 @@
 		C07D62D92AA5A6A200E2F447 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C07D62D72AA5A6A200E2F447 /* Main.storyboard */; };
 		C07D62DB2AA5A6A300E2F447 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C07D62DA2AA5A6A300E2F447 /* Assets.xcassets */; };
 		C07D62DE2AA5A6A300E2F447 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C07D62DC2AA5A6A300E2F447 /* LaunchScreen.storyboard */; };
+		C0DA0C922AA5D13B0027A097 /* AddBoard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C0DA0C912AA5D13B0027A097 /* AddBoard.storyboard */; };
+		C0DA0C942AA5D1630027A097 /* Profile.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C0DA0C932AA5D1630027A097 /* Profile.storyboard */; };
+		C0DA0C962AA5D1740027A097 /* MapPage.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C0DA0C952AA5D1740027A097 /* MapPage.storyboard */; };
+		C0DA0C982AA5D5E60027A097 /* UserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0DA0C972AA5D5E60027A097 /* UserInfo.swift */; };
+		C0DA0C9C2AA5D7370027A097 /* History.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0DA0C9B2AA5D7370027A097 /* History.swift */; };
+		C0DA0C9E2AA5D7550027A097 /* BoardInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0DA0C9D2AA5D7550027A097 /* BoardInfo.swift */; };
+		C0DA0CA12AA5D8800027A097 /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0DA0CA02AA5D8800027A097 /* Data.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +33,13 @@
 		C07D62DA2AA5A6A300E2F447 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C07D62DD2AA5A6A300E2F447 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		C07D62DF2AA5A6A300E2F447 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C0DA0C912AA5D13B0027A097 /* AddBoard.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = AddBoard.storyboard; sourceTree = "<group>"; };
+		C0DA0C932AA5D1630027A097 /* Profile.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Profile.storyboard; sourceTree = "<group>"; };
+		C0DA0C952AA5D1740027A097 /* MapPage.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = MapPage.storyboard; sourceTree = "<group>"; };
+		C0DA0C972AA5D5E60027A097 /* UserInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfo.swift; sourceTree = "<group>"; };
+		C0DA0C9B2AA5D7370027A097 /* History.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = History.swift; sourceTree = "<group>"; };
+		C0DA0C9D2AA5D7550027A097 /* BoardInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardInfo.swift; sourceTree = "<group>"; };
+		C0DA0CA02AA5D8800027A097 /* Data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Data.swift; sourceTree = "<group>"; };
 		D5B031B96F6D49FB68029511 /* Pods_bilboard.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_bilboard.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F10DB0D3FBD186E9D6E777C6 /* Pods-bilboard.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-bilboard.debug.xcconfig"; path = "Target Support Files/Pods-bilboard/Pods-bilboard.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -56,7 +70,6 @@
 				F10DB0D3FBD186E9D6E777C6 /* Pods-bilboard.debug.xcconfig */,
 				AFF5641AD2A2F80F8654DD63 /* Pods-bilboard.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -81,6 +94,8 @@
 		C07D62D02AA5A6A200E2F447 /* bilboard */ = {
 			isa = PBXGroup;
 			children = (
+				C0DA0C9F2AA5D8740027A097 /* Dummy */,
+				C0DA0C9A2AA5D6640027A097 /* Model */,
 				C07D62D12AA5A6A200E2F447 /* AppDelegate.swift */,
 				C07D62D32AA5A6A200E2F447 /* SceneDelegate.swift */,
 				C07D62D52AA5A6A200E2F447 /* ViewController.swift */,
@@ -88,8 +103,29 @@
 				C07D62DA2AA5A6A300E2F447 /* Assets.xcassets */,
 				C07D62DC2AA5A6A300E2F447 /* LaunchScreen.storyboard */,
 				C07D62DF2AA5A6A300E2F447 /* Info.plist */,
+				C0DA0C912AA5D13B0027A097 /* AddBoard.storyboard */,
+				C0DA0C932AA5D1630027A097 /* Profile.storyboard */,
+				C0DA0C952AA5D1740027A097 /* MapPage.storyboard */,
 			);
 			path = bilboard;
+			sourceTree = "<group>";
+		};
+		C0DA0C9A2AA5D6640027A097 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				C0DA0C972AA5D5E60027A097 /* UserInfo.swift */,
+				C0DA0C9B2AA5D7370027A097 /* History.swift */,
+				C0DA0C9D2AA5D7550027A097 /* BoardInfo.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		C0DA0C9F2AA5D8740027A097 /* Dummy */ = {
+			isa = PBXGroup;
+			children = (
+				C0DA0CA02AA5D8800027A097 /* Data.swift */,
+			);
+			path = Dummy;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -152,9 +188,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C0DA0C962AA5D1740027A097 /* MapPage.storyboard in Resources */,
 				C07D62DE2AA5A6A300E2F447 /* LaunchScreen.storyboard in Resources */,
 				C07D62DB2AA5A6A300E2F447 /* Assets.xcassets in Resources */,
+				C0DA0C942AA5D1630027A097 /* Profile.storyboard in Resources */,
 				C07D62D92AA5A6A200E2F447 /* Main.storyboard in Resources */,
+				C0DA0C922AA5D13B0027A097 /* AddBoard.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -207,9 +246,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C0DA0CA12AA5D8800027A097 /* Data.swift in Sources */,
+				C0DA0C9E2AA5D7550027A097 /* BoardInfo.swift in Sources */,
 				C07D62D62AA5A6A200E2F447 /* ViewController.swift in Sources */,
 				C07D62D22AA5A6A200E2F447 /* AppDelegate.swift in Sources */,
 				C07D62D42AA5A6A200E2F447 /* SceneDelegate.swift in Sources */,
+				C0DA0C982AA5D5E60027A097 /* UserInfo.swift in Sources */,
+				C0DA0C9C2AA5D7370027A097 /* History.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

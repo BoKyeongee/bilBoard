@@ -14,9 +14,9 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         
-        let mapView = NMFMapView(frame: self.view.bounds)
-             mapView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-             self.view.addSubview(mapView)
+//        let mapView = NMFMapView(frame: self.view.bounds)
+//             mapView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+//             self.view.addSubview(mapView)
     }
 
 

@@ -9,7 +9,7 @@ import Foundation
 
 struct UserInfo {
     
-    init(nickname: String, userId: String, userPw: String, email: String, isUsing: Bool, isLogin: Bool, profileImageUrl: String, usageHistory: [History]?, bilBoardInfos: [BoardInfo]?) {
+    init(nickname: String, userId: String, userPw: String, email: String, isUsing: Bool, isLogin: Bool, profileImageUrl: String?, usageHistory: [History]?, bilBoardInfos: [BoardInfo]?) {
     self.nickname = nickname
     self.userId = userId
     self.userPw = userPw

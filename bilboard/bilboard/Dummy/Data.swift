@@ -13,7 +13,7 @@ import Foundation
 //    private init() {}
 //}
 
-let profile = UserInfo(
+var profile = UserInfo(
     nickname: "노스크럼",
     userId: "importantMorning",
     userPw: "Shtmzmfja7&",
@@ -23,8 +23,8 @@ let profile = UserInfo(
     profileImageUrl: nil,
     usageHistory: nil,
     bilBoardInfos: nil,
-    currentLat: 37.42,
-    currentLng: 126.766
+    currentLat: 37.481776875776,
+    currentLng: 126.79742178525
 )
 
 let history1 = History(historyID: 1, startTime: "2023-09-04 10:00:00", endTime: "2023-09-04 12:00:00", startLat: 37.123, startLong: 126.456, endLat: 37.456, endLong: 126.789, useDate: "2023-09-04", bilBoardID: 101)

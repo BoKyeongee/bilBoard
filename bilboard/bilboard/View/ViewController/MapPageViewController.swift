@@ -8,9 +8,42 @@
 import UIKit
 import NMapsMap
 import SnapKit
-import CoreLocation
+extension MapPageViewController : UITextFieldDelegate{
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        if let address = textField.text, !address.isEmpty {
+            AddressDecoder.geocodeAddress(query: address) { [weak self] result in
+                guard let self = self else {return}
+                switch result {
+                case .success(let geocode):
+                    if let firstAddress = geocode.addresses.first {
+                        let latitude = firstAddress.latitude
+                        let longitude = firstAddress.longitude
+                        DispatchQueue.main.async{ [weak self] in
+                            guard let self = self else {return }
+                            mapView.moveCamera(NMFCameraUpdate(scrollTo: NMGLatLng(lat:Double(latitude)!, lng:Double(longitude)!)))
+                        }
+                    } else {
+                        
+                        DispatchQueue.main.async{ [weak self] in
+                            guard let self = self else {return }
+                            showAlert(title: "에러", message: "주소를 찾을 수 없습니다")
+                        }
+                    }
+                case .failure(let error):
+                    DispatchQueue.main.async{ [weak self] in
+                        guard let self = self else {return }
+                        showAlert(title: "에러", message: "주소 디코딩 오류: \(error.localizedDescription)")
+                    }
+                }
+            }
+            textField.resignFirstResponder()
+        }
+        return true
+    }
+}
+
+
 class MapPageViewController: UIViewController, NMFMapViewTouchDelegate {
-    
     //주소 텍스트 필드
     lazy var addressTextField: UITextField = {
         let textField = UITextField()
@@ -22,6 +55,9 @@ class MapPageViewController: UIViewController, NMFMapViewTouchDelegate {
         textField.leftView = searchIconView
         textField.leftViewMode = .always
         textField.placeholder = "검색하고자 하는 지역명을 입력해주세요"
+        textField.autocorrectionType = .no
+        textField.keyboardType = .default // 여기를 .default로 변경
+        textField.delegate = self
         return textField
     }()
     //주소 입력
@@ -168,7 +204,7 @@ class MapPageViewController: UIViewController, NMFMapViewTouchDelegate {
         
         let statusLabel = UILabel()
         
-        statusLabel.text =  "탑승 중 아님"
+        statusLabel.text = "탑승 중 아님"
         statusLabel.textColor = .black
         statusLabel.font = UIFont.systemFont(ofSize: 20)
         view.addSubview(statusLabel)
@@ -192,11 +228,13 @@ class MapPageViewController: UIViewController, NMFMapViewTouchDelegate {
         }
         
         let rideOrReturnButton = UIButton()
-        rideOrReturnButton.backgroundColor = .gray
+        rideOrReturnButton.backgroundColor = .lightGray
         rideOrReturnButton.layer.cornerRadius = 10
         rideOrReturnButton.addTarget(self, action: #selector(onRideOrReturnButtonTapped), for: .touchUpInside)
         rideOrReturnButton.setTitle("탑승하기", for: .normal)
-    
+        rideOrReturnButton.isEnabled = false
+        rideOrReturnButton.setTitleColor(.gray, for: .disabled)
+        
         view.addSubview(rideOrReturnButton)
         rideOrReturnButton.snp.makeConstraints {
             $0.centerX.equalToSuperview()
@@ -212,36 +250,25 @@ class MapPageViewController: UIViewController, NMFMapViewTouchDelegate {
         let locationManager = CLLocationManager()
         return locationManager
     }()
-    var currentLocationCoordinate: NMGLatLng?
-    var markerLocationCoordinate : NMGLatLng?
+    var returnLocationCoordinate : NMGLatLng?
     var isMarkerTouched = false
     var markerList : [NMFMarker] = []
     var currentMarker : NMFMarker?
     var touchedMarker : NMFMarker?
     override func viewDidLoad() {
         super.viewDidLoad()
-        //        DispatchQueue.main.async{ [weak self] in
-        //            guard let self = self else {return}
-        //            let memoWriteVC = MapPageInfoController()
-        //            memoWriteVC.modalPresentationStyle = .custom
-        //            memoWriteVC.transitioningDelegate = self
-        //
-        //            if let presentationController = memoWriteVC.presentationController as? UISheetPresentationController {
-        //                presentationController.detents = [.medium()]
-        //            }
-        //            present(memoWriteVC, animated: true, completion: nil)
-        //
-        //        }
         setupLayout()
-        setupUserInfo()
+        setupUserInfo(isUsing : profile.isUsing)
         setupLocationManagerConfig()
         setupCurrentUserLocationInfo(UserCurrentlat: profile.currentLat, userCurrentlng: profile.currentLng)
         setupDummyMarkers(UserCurrentlat: profile.currentLat, userCurrentlng: profile.currentLng)
+
+//        let a = NMGWebMercatorCoord()
+//        a.geo
     }
     func updateBomttomUI(){
         let circleView = bottomView.subviews[0] as UIView
         let statusLabel = bottomView.subviews[1] as? UILabel
-        let usingTimeLabel = bottomView.subviews[2] as? UILabel
         let rideOrReturnButton = bottomView.subviews[3] as? UIButton
         
         if profile.isUsing == false{
@@ -255,12 +282,12 @@ class MapPageViewController: UIViewController, NMFMapViewTouchDelegate {
             rideOrReturnButton?.setTitle("반납하기", for: .normal)
         }
     }
-    
-    func setupUserInfo(){
+    func setupUserInfo(isUsing : Bool){
         profile.isLogin = true
+        profile.isUsing = isUsing
     }
     func setupDummyMarkers(UserCurrentlat: Double, userCurrentlng: Double) {
-        for _ in 0...5 {
+        for _ in 0...1 {
             let randomLatOffset = Double.random(in: -0.02...0.02)
             let randomLngOffset = Double.random(in: -0.02...0.02)
             let lat = UserCurrentlat + randomLatOffset
@@ -277,61 +304,123 @@ class MapPageViewController: UIViewController, NMFMapViewTouchDelegate {
         }
     }
     
-    
-    func updateButtonTitleColor() {
-        let rideOrReturnButton = bottomView.subviews[3] as? UIButton
-        if isMarkerTouched {
-            rideOrReturnButton!.setTitleColor(.blue, for: .normal)
-        } else {
-            rideOrReturnButton!.setTitleColor(.white, for: .normal)
-        }
-    }
-    
     func setupLocationManagerConfig(){
         mapView.touchDelegate = self
-        locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         locationManager.requestWhenInUseAuthorization()
         locationManager.startUpdatingLocation()
     }
     
-    
     func mapView(_ mapView: NMFMapView, didTapMap latlng: NMGLatLng, point: CGPoint) {
-        var closestMarker: NMFMarker? = nil
-        var closestDistance: CLLocationDistance = Double.infinity
         
-        if !profile.isUsing{
-            for marker in markerList {
-                let markerLocation = CLLocation(latitude: marker.position.lat, longitude: marker.position.lng)
-                let clickLocation = CLLocation(latitude: latlng.lat, longitude: latlng.lng)
-                let distance = markerLocation.distance(from: clickLocation)
-                if distance < closestDistance {
-                    closestMarker = marker
-                    closestDistance = distance
-                }
-            }
+        if profile.isUsing {
+            rideOrReturnEnabled(enabled: true)
+            returnLocationCoordinate = NMGLatLng(lat: latlng.lat, lng: latlng.lng)
+            updateBomttomUI()
+        } else {
+            let closestMarker = findClosestMarker(to: latlng)
+
             if let marker = closestMarker {
                 isMarkerTouched = true
-                updateButtonTitleColor()
+                rideOrReturnEnabled(enabled: true)
                 touchedMarker = marker
+                print(touchedMarker)
             } else {
-                print("가까운마커 찾을수 없음")
+                print("인접한 마커가 없습니다.")
             }
-        }else{
-            markerLocationCoordinate = NMGLatLng(lat: latlng.lat, lng: latlng.lng)
-            isMarkerTouched = false
+            updateBomttomUI()
         }
     }
+    @objc func onRideOrReturnButtonTapped(){
+        if isMarkerTouched {
+            handleMarkerTouched()
+        } else {
+            handleNoMarkerTouched()
+        }
+    }
+
+    func handleMarkerTouched() {
+        guard let touchedMarker = touchedMarker else {
+            return
+        }
+        
+        removeMarkerAndMoveCamera(to: NMGLatLng(lat: touchedMarker.position.lat, lng: touchedMarker.position.lng))
+        
+        profile.isUsing = true
+        isMarkerTouched = false
+        
+        if let index = markerList.firstIndex(of: touchedMarker) {
+            markerList.remove(at: index)
+            print("마커 삭제 완료")
+        }
+        
+        currentMarker?.mapView = nil
+        currentMarker = touchedMarker
+        setupCurrentUserLocationInfo(UserCurrentlat: touchedMarker.position.lat, userCurrentlng: touchedMarker.position.lng)
+        
+        updateBomttomUI()
+        rideOrReturnEnabled(enabled: true)
+    }
+
+    func handleNoMarkerTouched() {
+        guard let coordinate = returnLocationCoordinate else {
+            return
+        }
+        createMarker(at: coordinate)
+        
+        mapView.setNeedsDisplay()
+        mapView.moveCamera(NMFCameraUpdate(scrollTo: NMGLatLng(lat: coordinate.lat, lng: coordinate.lng)))
+        
+        profile.isUsing = false
+        isMarkerTouched = true
+        
+        currentMarker?.mapView = nil
+        currentMarker?.position = NMGLatLng(lat: coordinate.lat, lng: coordinate.lng)
+        
+        updateBomttomUI()
+        rideOrReturnEnabled(enabled: false)
+    }
+    func rideOrReturnEnabled(enabled : Bool)
+    {
+        let rideOrReturnButton = bottomView.subviews[3] as? UIButton
+        if enabled{
+            rideOrReturnButton?.isEnabled = enabled
+            rideOrReturnButton?.setTitleColor(.black, for: .normal)
+        }else{
+            rideOrReturnButton?.isEnabled = enabled
+            rideOrReturnButton?.setTitleColor(.gray, for: .disabled)
+        }
+    }
+    
+    func findClosestMarker(to targetLatLng: NMGLatLng) -> NMFMarker? {
+        var closerMarker: NMFMarker? = nil
+        let maxDistance: CLLocationDistance = 150.0
+        for marker in markerList {
+            let markerLocation = CLLocation(latitude: marker.position.lat, longitude: marker.position.lng)
+            let targetLocation = CLLocation(latitude: targetLatLng.lat, longitude: targetLatLng.lng)
+            let distance = markerLocation.distance(from: targetLocation)
+            
+            if distance < maxDistance {
+                closerMarker = marker
+                break
+            }
+        }
+        return closerMarker
+    }
+    
     func setupCurrentUserLocationInfo(UserCurrentlat : Double, userCurrentlng : Double){
-        mapView.moveCamera(NMFCameraUpdate(scrollTo: NMGLatLng(lat:UserCurrentlat, lng:userCurrentlng)))
         let marker = NMFMarker()
         marker.position = NMGLatLng(lat: UserCurrentlat, lng: userCurrentlng)
         marker.captionColor = UIColor.blue
         marker.captionHaloColor = UIColor(red: 200.0/255.0, green: 1, blue: 1, alpha: 1)
         marker.captionText = "현위치"
         marker.captionTextSize = 20
+        marker.width = 30
+        marker.height = 30
         marker.mapView = mapView
         currentMarker = marker
+        
+        mapView.moveCamera(NMFCameraUpdate(scrollTo: NMGLatLng(lat:UserCurrentlat, lng:userCurrentlng)))
     }
     @objc func onSearchPathButtonTapped(){
         print("onSearchPathButtonTapped")
@@ -340,7 +429,7 @@ class MapPageViewController: UIViewController, NMFMapViewTouchDelegate {
         print("onCancelButtonTapped")
     }
     @objc func onBackToOriginButtonTapped(){
-        if let latitude = currentLocationCoordinate?.lat, let longitude = currentLocationCoordinate?.lng{
+        if let latitude = currentMarker?.position.lat, let longitude = currentMarker?.position.lng{
             mapView.moveCamera(NMFCameraUpdate(scrollTo: NMGLatLng(lat : latitude, lng :longitude))
             )}else{ return}
     }
@@ -350,57 +439,41 @@ class MapPageViewController: UIViewController, NMFMapViewTouchDelegate {
     @objc func onZoomOutButtonTapped(){
         mapView.moveCamera(NMFCameraUpdate.withZoomOut())
     }
-    @objc func onRideOrReturnButtonTapped(){
-        if isMarkerTouched {
-            touchedMarker?.mapView = nil
+
+    func createMarker(at coordinate: NMGLatLng) {
+        let marker = NMFMarker()
+        marker.iconTintColor = UIColor.blue
+        marker.position = coordinate
+        marker.captionColor = UIColor.blue
+        marker.captionHaloColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1)
+        marker.captionText = "퀵보드 대여 가능"
+        marker.captionTextSize = 20
+        marker.mapView = mapView
+        markerList.append(marker)
+    }
+    
+    
+    func removeMarkerAndMoveCamera(to position: NMGLatLng) {
+        if let touchedMarker = touchedMarker {
+            touchedMarker.mapView = nil
             mapView.setNeedsDisplay()
-            mapView.moveCamera(NMFCameraUpdate(scrollTo: NMGLatLng(lat : touchedMarker!.position.lat, lng : touchedMarker!.position.lng)))
-            profile.isUsing = true
-            isMarkerTouched = false
-            if let index = markerList.firstIndex(of: touchedMarker!) {
-                markerList.remove(at: index) // 특정 인덱스의 마커 삭제
-                print("삭제완료")
-            }
-            updateBomttomUI()
-            currentMarker?.mapView = nil
-            currentMarker = touchedMarker
-            setupCurrentUserLocationInfo(UserCurrentlat: touchedMarker!.position.lat, userCurrentlng: touchedMarker!.position.lng)
-        }else{
-            
-            let marker = NMFMarker()
-            marker.iconTintColor = UIColor.blue
-            marker.position = NMGLatLng(lat: markerLocationCoordinate!.lat, lng: markerLocationCoordinate!.lng)
-            marker.captionColor = UIColor.blue
-            marker.captionHaloColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1)
-            marker.captionText = "퀵보드 대여 가능"
-            marker.captionTextSize = 20
-            marker.mapView = mapView
-            mapView.setNeedsDisplay()
-            mapView.moveCamera(NMFCameraUpdate(scrollTo: NMGLatLng(lat : markerLocationCoordinate!.lat, lng : markerLocationCoordinate!.lng)))
-            profile.isUsing = false
-            isMarkerTouched = true
-            currentMarker?.mapView = nil
-            updateBomttomUI()
+            mapView.moveCamera(NMFCameraUpdate(scrollTo: position))
         }
-        print("onRideOrReturnButtonTapped")
     }
     
     func setupLayout() {
         [mapView,addressTitleLabel, addressTextField, goalView,backToOriginButton,zoomInButton,zoomOutButton,bottomView].forEach(view.addSubview)
-        
         mapView.snp.makeConstraints {
             $0.top.equalTo(view.snp.top)
             $0.leading.equalTo(view.safeAreaLayoutGuide.snp.leading)
             $0.trailing.equalTo(view.safeAreaLayoutGuide.snp.trailing)
             $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
         }
-        
         addressTitleLabel.snp.makeConstraints {
             $0.centerX.equalToSuperview()
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(20)
             $0.width.equalToSuperview().multipliedBy(0.6)
         }
-        
         addressTextField.snp.makeConstraints {
             $0.centerX.equalToSuperview()
             $0.top.equalTo(addressTitleLabel.snp.bottom).offset(20)
@@ -415,77 +488,41 @@ class MapPageViewController: UIViewController, NMFMapViewTouchDelegate {
             $0.trailing.equalTo(addressTextField.snp.trailing)
             $0.height.equalToSuperview().multipliedBy(0.14)
         }
-        
         backToOriginButton.snp.makeConstraints {
             $0.centerY.equalToSuperview()
             $0.trailing.equalTo(goalView.snp.trailing)
             $0.width.equalToSuperview().multipliedBy(0.05)
             $0.height.equalToSuperview().multipliedBy(0.05)
         }
-        
         zoomInButton.snp.makeConstraints {
             $0.top.equalTo(backToOriginButton.snp.bottom).offset(10)
             $0.trailing.equalTo(backToOriginButton.snp.trailing)
             $0.width.equalToSuperview().multipliedBy(0.05)
             $0.height.equalToSuperview().multipliedBy(0.05)
         }
-        
         zoomOutButton.snp.makeConstraints {
             $0.top.equalTo(zoomInButton.snp.bottom).offset(10)
             $0.trailing.equalTo(zoomInButton.snp.trailing)
             $0.width.equalToSuperview().multipliedBy(0.05)
             $0.height.equalToSuperview().multipliedBy(0.05)
         }
-        
         bottomView.snp.makeConstraints{
             $0.leading.equalTo(view.safeAreaLayoutGuide.snp.leading)
             $0.trailing.equalTo(view.safeAreaLayoutGuide.snp.trailing)
             $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
             $0.height.equalToSuperview().multipliedBy(0.15)
         }
-        //        if let goalLabel = goalView.subviews.first as? UILabel {
-        //            goalLabel.text = "ZZ"
-        //        }
     }
 }
 
-
 extension MapPageViewController: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        currentLocationCoordinate = NMGLatLng(lat: profile.currentLat, lng: profile.currentLng)
+        currentMarker = NMFMarker(position: NMGLatLng(lat: profile.currentLat, lng: profile.currentLng))
     }
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         print(error)
     }
 }
 
-class MapPageInfoController : UIViewController
-{
-    override func viewDidLoad() {
-        super.viewDidLoad()
-    }
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        view.backgroundColor = .gray
-        
-        modalPresentationStyle = .overCurrentContext
-    }
-}
-class BottomSheetPresentationController: UIPresentationController {
-    override var frameOfPresentedViewInContainerView: CGRect {
-        guard let containerView = containerView else {
-            return CGRect.zero
-        }
-        let height: CGFloat = 200
-        let yPosition = containerView.bounds.height - height
-        return CGRect(x: 0, y: yPosition, width: containerView.bounds.width, height: height)
-    }
-}
-
-extension MapPageViewController: UIViewControllerTransitioningDelegate {
-    func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
-        return BottomSheetPresentationController(presentedViewController: presented, presenting: presenting)
-    }
-}
 
 

@@ -9,7 +9,7 @@ import Foundation
 
 struct UserInfo {
     
-    init(nickname: String, userId: String, userPw: String, email: String, isUsing: Bool, isLogin: Bool, profileImageUrl: String?, usageHistory: [History]?, bilBoardInfos: [BoardInfo]?) {
+    init(nickname: String, userId: String, userPw: String, email: String, isUsing: Bool, isLogin: Bool, profileImageUrl: String?, usageHistory: [History]?, bilBoardInfos: [BoardInfo]?, currentLat : Double, currentLng : Double) {
     self.nickname = nickname
     self.userId = userId
     self.userPw = userPw
@@ -19,6 +19,8 @@ struct UserInfo {
     self.profileImageUrl = profileImageUrl
     self.usageHistory = usageHistory
     self.bilBoardInfos = bilBoardInfos
+    self.currentLat = currentLat
+    self.currentLng = currentLng
     }
     
     
@@ -31,4 +33,6 @@ struct UserInfo {
     var profileImageUrl:String?
     var usageHistory:[History]?
     var bilBoardInfos:[BoardInfo]?
+    var currentLat : Double //위도
+    var currentLng : Double //경도
 }

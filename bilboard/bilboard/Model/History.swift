@@ -10,7 +10,7 @@ import Foundation
 
 struct History {
     
-    init(historyID: Int, startTime: String, endTime: String, startLat: Float, startLong: Float, endLat: Float, endLong: Float, useDate: String, bilBoardID: Int) {
+    init(historyID: Int, startTime: String, endTime: String, startLat: Double, startLong: Double, endLat: Double, endLong: Double, useDate: String, bilBoardID: Int) {
     self.historyID = historyID
     self.startTime = startTime
     self.endTime = endTime
@@ -25,10 +25,10 @@ struct History {
     var historyID: Int
     var startTime: String
     var endTime: String
-    var startLat: Float
-    var startLong: Float
-    var endLat: Float
-    var endLong: Float
+    var startLat: Double
+    var startLong: Double
+    var endLat: Double
+    var endLong: Double
     var useDate: String
     var bilBoardID: Int
 }

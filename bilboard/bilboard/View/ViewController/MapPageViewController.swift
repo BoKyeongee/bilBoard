@@ -8,6 +8,7 @@
 import UIKit
 import NMapsMap
 import SnapKit
+import CoreLocation
 class MapPageViewController: UIViewController {
     
     //주소 텍스트 필드
@@ -146,7 +147,7 @@ class MapPageViewController: UIViewController {
         return mapView
     }()
     
-    
+    //하단 뷰
     lazy var bottomView: UIView = {
         let view = UIView()
         view.backgroundColor = .white
@@ -208,6 +209,12 @@ class MapPageViewController: UIViewController {
         return view
     }()
     
+    lazy var locationManager : CLLocationManager = {
+        let locationManager = CLLocationManager()
+        return locationManager
+    }()
+    var currentLocationCoordinate: CLLocationCoordinate2D?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 //        DispatchQueue.main.async{ [weak self] in
@@ -223,8 +230,25 @@ class MapPageViewController: UIViewController {
 //
 //        }
         setupLayout()
+        setupLocationManagerConfig()
+        setupCurrentUserLocationInfo(UserCurrentlat: profile.currentLat, userCurrentlng: profile.currentLng)
     }
-    
+    func setupLocationManagerConfig(){
+        locationManager.delegate = self
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        locationManager.requestWhenInUseAuthorization()
+        locationManager.startUpdatingLocation()
+    }
+    func setupCurrentUserLocationInfo(UserCurrentlat : Double, userCurrentlng : Double){
+        mapView.moveCamera(NMFCameraUpdate(scrollTo: NMGLatLng(lat:UserCurrentlat, lng:userCurrentlng)))
+        let marker = NMFMarker()
+        marker.position = NMGLatLng(lat: UserCurrentlat, lng: userCurrentlng)
+        marker.captionColor = UIColor.blue
+        marker.captionHaloColor = UIColor(red: 200.0/255.0, green: 1, blue: 1, alpha: 1)
+        marker.captionText = "현위치"
+        marker.captionTextSize = 20
+        marker.mapView = mapView
+    }
     @objc func onSearchPathButtonTapped(){
         print("onSearchPathButtonTapped")
     }
@@ -232,13 +256,17 @@ class MapPageViewController: UIViewController {
         print("onCancelButtonTapped")
     }
     @objc func onBackToOriginButtonTapped(){
-        print("onBackToOriginButton")
+        if let latitude = currentLocationCoordinate?.latitude, let longitude = currentLocationCoordinate?.longitude {
+            mapView.moveCamera(NMFCameraUpdate(scrollTo: NMGLatLng(lat:latitude, lng:longitude)))        } else {
+        }
+        
+        //print("onBackToOriginButton")
     }
     @objc func onZoomInButtonTapped(){
-        print("onZoomInButtonTapped")
+        mapView.moveCamera(NMFCameraUpdate.withZoomIn())
     }
     @objc func onZoomOutButtonTapped(){
-        print("onZoomOutButtonTapped")
+        mapView.moveCamera(NMFCameraUpdate.withZoomOut())
     }
     @objc func onRideOrReturnButtonTapped(){
         print("onRideOrReturnButtonTapped")
@@ -308,6 +336,18 @@ class MapPageViewController: UIViewController {
     }
 }
 
+
+extension MapPageViewController: CLLocationManagerDelegate {
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        currentLocationCoordinate = CLLocationCoordinate2D(latitude: profile.currentLat, longitude: profile.currentLng)
+        print(locations)
+    }
+
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        print(error)
+    }
+}
+
 class MapPageInfoController : UIViewController
 {
     override func viewDidLoad() {
@@ -317,7 +357,7 @@ class MapPageInfoController : UIViewController
         super.viewWillAppear(animated)
         view.backgroundColor = .gray
         
-        modalPresentationStyle = .overCurrentContext // 변경된 부분
+        modalPresentationStyle = .overCurrentContext
     }
 }
 class BottomSheetPresentationController: UIPresentationController {
@@ -326,7 +366,7 @@ class BottomSheetPresentationController: UIPresentationController {
             return CGRect.zero
         }
 
-        let height: CGFloat = 200 // 원하는 높이
+        let height: CGFloat = 200
         let yPosition = containerView.bounds.height - height
         return CGRect(x: 0, y: yPosition, width: containerView.bounds.width, height: height)
     }

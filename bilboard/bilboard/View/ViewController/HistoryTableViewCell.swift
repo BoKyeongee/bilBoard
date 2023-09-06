@@ -8,7 +8,7 @@
 import UIKit
 
 class HistoryTableViewCell: UITableViewCell {
-    //let history1 = History(historyID: 1, startTime: "2023-09-04 10:00:00", endTime: "2023-09-04 12:00:00", startLat: 37.123, startLong: 126.456, endLat: 37.456, endLong: 126.789, useDate: "2023-09-04", bilBoardID: 101)
+
 
     @IBOutlet weak var historyContentBox: UIView!
     @IBOutlet weak var historyCellBox: UIView!

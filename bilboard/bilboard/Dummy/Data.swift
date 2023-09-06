@@ -26,6 +26,10 @@ let boardInfo2 = BoardInfo(address: "부산시 해운대구", boardType: BoardTy
 let boardInfo3 = BoardInfo(address: "부산시 해운대구", boardType: BoardTypes.basic, boardID: 1003, registerTime: "2023-09-05 10:45:00",  lat: 37.481778845776, lng : 126.79888278525)
 
 let boardInfo4 = BoardInfo(address: "부산시 해운대구", boardType: BoardTypes.basic, boardID: 1004, registerTime: "2023-09-05 10:45:00",  lat: 37.481774875776, lng : 126.79543178525)
+
+
+
+
 var profile = UserInfo(
     nickname: "노스크럼",
     userId: "importantMorning",

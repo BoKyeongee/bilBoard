@@ -8,8 +8,8 @@
 import UIKit
 
 class SignUpPageViewController: UIViewController {
-
-
+    
+    
     @IBOutlet weak var nickNameValidationText: UILabel!
     @IBOutlet weak var idValidationText: UILabel!
     @IBOutlet weak var pwValidationText: UILabel!
@@ -218,7 +218,7 @@ class SignUpPageViewController: UIViewController {
               (activeTextField == againPwTextField || activeTextField == emailTextField || activeTextField == emailNumberTextField) else {
             return
         }
-
+        
         if self.view.frame.origin.y == 0 {
             self.view.frame.origin.y -= keyboardSize.height
         }
@@ -243,57 +243,68 @@ class SignUpPageViewController: UIViewController {
     
     //done 버튼 누르면 키보드 숨기기
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-            textField.resignFirstResponder()
-            return true
+        textField.resignFirstResponder()
+        return true
+    }
+    
+    //이메일 인증 버튼
+    @IBAction func emailVerificationButton(_ sender: UIButton) {
+        guard let email = emailTextField.text, !email.isEmpty else {
+            // 에러 메시지를 사용자에게 보여주거나 다른 처리를 수행
+            return
         }
+        print("메일을 발송하였습니다")
+        sendVerificationEmail(to: email)
+    }
+    
     
     @IBAction func signUpButtonTapped(_ sender: UIButton) {
         
+        //텍스트 필드 오류메세지
         var errorMessage = ""
-
-            if nickNameTextField.text?.isEmpty == true || nickNameValidationText.textColor == .red {
-                errorMessage += "닉네임을 올바르게 입력해주세요.\n"
-            }
-            
-            if idTextField.text?.isEmpty == true || idValidationText.textColor == .red {
-                errorMessage += "아이디를 올바르게 입력해주세요.\n"
-            }
         
-            if pwTextField.text?.isEmpty == true || pwValidationText.textColor == .red {
-                errorMessage += "비밀번호를 올바르게 입력해주세요.\n"
-            }
+        if nickNameTextField.text?.isEmpty == true || nickNameValidationText.textColor == .red {
+            errorMessage += "닉네임을 올바르게 입력해주세요.\n"
+        }
         
-            if againPwTextField.text?.isEmpty == true || againPwValidationText.textColor == .red {
-                errorMessage += "비밀번호 재확인을 올바르게 입력해주세요.\n"
-            }
-            if emailTextField.text?.isEmpty == true  {
-                errorMessage += "이메일은 필수 입력란입니다.\n"
-            }
-            if emailNumberTextField.text?.isEmpty == true  {
-                errorMessage += "이메일 인증이 필요합니다.\n"
-            }
-
-
-            if !errorMessage.isEmpty {
-                showAlert(message: errorMessage)
-                return
-            }
-            
-            // 모든 유효성 검사를 통과한 경우, UserDefaults에 데이터 저장
-            saveUserDataToUserDefaults()
+        if idTextField.text?.isEmpty == true || idValidationText.textColor == .red {
+            errorMessage += "아이디를 올바르게 입력해주세요.\n"
+        }
+        
+        if pwTextField.text?.isEmpty == true || pwValidationText.textColor == .red {
+            errorMessage += "비밀번호를 올바르게 입력해주세요.\n"
+        }
+        
+        if againPwTextField.text?.isEmpty == true || againPwValidationText.textColor == .red {
+            errorMessage += "비밀번호 재확인을 올바르게 입력해주세요.\n"
+        }
+        if emailTextField.text?.isEmpty == true  {
+            errorMessage += "이메일은 필수 입력란입니다.\n"
+        }
+        if emailNumberTextField.text?.isEmpty == true  {
+            errorMessage += "이메일 인증이 필요합니다.\n"
+        }
+        
+        
+        if !errorMessage.isEmpty {
+            showAlert(message: errorMessage)
+            return
+        }
+        
+        // 모든 유효성 검사를 통과한 경우, UserDefaults에 데이터 저장
+        saveUserDataToUserDefaults()
         
         func saveUserDataToUserDefaults() {
             let userData: [String: String] = [
                 "nickName": nickNameTextField.text!,
                 "id": idTextField.text!,
                 "password": pwTextField.text!,
-                "email": emailTextField.text!,
-                "emailNumber": emailNumberTextField.text!
+                "email": emailTextField.text!
             ]
             
             UserDefaults.standard.setValue(userData, forKey: "userData")
         }
-
+        
         
         self.performSegue(withIdentifier: "LoginViewController", sender: self)
     }
@@ -308,7 +319,7 @@ class SignUpPageViewController: UIViewController {
 }
 
 extension SignUpPageViewController: UITextFieldDelegate {
-   
+    
 }
 //UIView, 모든 하위 클래스에 findFirstResponder 메서드 추가
 extension UIView {

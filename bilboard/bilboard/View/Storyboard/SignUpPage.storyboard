@@ -108,6 +108,9 @@
                                         <buttonConfiguration key="configuration" style="filled" title="인증">
                                             <color key="baseBackgroundColor" red="0.56469356459999998" green="0.29835147709999998" blue="1" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                         </buttonConfiguration>
+                                        <connections>
+                                            <action selector="emailVerificationButton:" destination="GWk-Qt-NnC" eventType="touchUpInside" id="Is4-JB-TvH"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                                 <constraints>

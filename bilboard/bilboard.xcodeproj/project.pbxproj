@@ -10,6 +10,7 @@
 		3BA265012AA61E9200E4663F /* SignUpPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BA265002AA61E9200E4663F /* SignUpPageViewController.swift */; };
 		3BA265032AA61EA200E4663F /* SignInPage.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3BA265022AA61EA200E4663F /* SignInPage.storyboard */; };
 		3BA265052AA61EB000E4663F /* SignUpPage.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3BA265042AA61EB000E4663F /* SignUpPage.storyboard */; };
+		3BA265092AA855BF00E4663F /* LoginUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BA265082AA855BF00E4663F /* LoginUser.swift */; };
 		5F05CFA72AA5E6850076DE47 /* AppBoardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F05CFA62AA5E6850076DE47 /* AppBoardViewController.swift */; };
 		5F05CFA92AA5E6D30076DE47 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F05CFA82AA5E6D30076DE47 /* LoginViewController.swift */; };
 		5F05CFAB2AA5E6E40076DE47 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F05CFAA2AA5E6E40076DE47 /* ProfileViewController.swift */; };
@@ -33,6 +34,7 @@
 		3BA265002AA61E9200E4663F /* SignUpPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpPageViewController.swift; sourceTree = "<group>"; };
 		3BA265022AA61EA200E4663F /* SignInPage.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = SignInPage.storyboard; sourceTree = "<group>"; };
 		3BA265042AA61EB000E4663F /* SignUpPage.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = SignUpPage.storyboard; sourceTree = "<group>"; };
+		3BA265082AA855BF00E4663F /* LoginUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginUser.swift; sourceTree = "<group>"; };
 		5F05CFA62AA5E6850076DE47 /* AppBoardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppBoardViewController.swift; sourceTree = "<group>"; };
 		5F05CFA82AA5E6D30076DE47 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		5F05CFAA2AA5E6E40076DE47 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
@@ -155,6 +157,7 @@
 		C0DA0C9A2AA5D6640027A097 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				3BA265082AA855BF00E4663F /* LoginUser.swift */,
 				C0DA0C972AA5D5E60027A097 /* UserInfo.swift */,
 				C0DA0C9B2AA5D7370027A097 /* History.swift */,
 				C0DA0C9D2AA5D7550027A097 /* BoardInfo.swift */,
@@ -296,6 +299,7 @@
 				3BA265012AA61E9200E4663F /* SignUpPageViewController.swift in Sources */,
 				5F05CFAB2AA5E6E40076DE47 /* ProfileViewController.swift in Sources */,
 				C0DA0C9E2AA5D7550027A097 /* BoardInfo.swift in Sources */,
+				3BA265092AA855BF00E4663F /* LoginUser.swift in Sources */,
 				C07D62D22AA5A6A200E2F447 /* AppDelegate.swift in Sources */,
 				C07D62D42AA5A6A200E2F447 /* SceneDelegate.swift in Sources */,
 				C0DA0C982AA5D5E60027A097 /* UserInfo.swift in Sources */,

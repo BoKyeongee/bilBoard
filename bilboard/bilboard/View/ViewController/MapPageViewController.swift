@@ -8,9 +8,44 @@
 import UIKit
 import NMapsMap
 import SnapKit
-import CoreLocation
-class MapPageViewController: UIViewController {
-    
+extension MapPageViewController : UITextFieldDelegate{
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        if let address = textField.text, !address.isEmpty {
+            AddressDecoder.getGeocodeAddress(query: address) { [weak self] result in
+                guard let self = self else {return}
+                switch result {
+                case .success(let geocode):
+                    if let firstAddress = geocode.addresses.first {
+                        let latitude = firstAddress.latitude
+                        let longitude = firstAddress.longitude
+                        print(latitude)
+                        print(longitude)
+                        DispatchQueue.main.async{ [weak self] in
+                            guard let self = self else {return }
+                            mapView.moveCamera(NMFCameraUpdate(scrollTo: NMGLatLng(lat:Double(latitude)!, lng:Double(longitude)!)))
+                        }
+                    } else {
+                        
+                        DispatchQueue.main.async{ [weak self] in
+                            guard let self = self else {return }
+                            showAlert(title: "에러", message: "주소를 찾을 수 없습니다")
+                        }
+                    }
+                case .failure(let error):
+                    DispatchQueue.main.async{ [weak self] in
+                        guard let self = self else {return }
+                        showAlert(title: "에러", message: "주소 디코딩 오류: \(error.localizedDescription)")
+                    }
+                }
+            }
+            textField.resignFirstResponder()
+        }
+        return true
+    }
+}
+
+
+class MapPageViewController: UIViewController, NMFMapViewTouchDelegate {
     //주소 텍스트 필드
     lazy var addressTextField: UITextField = {
         let textField = UITextField()
@@ -22,6 +57,9 @@ class MapPageViewController: UIViewController {
         textField.leftView = searchIconView
         textField.leftViewMode = .always
         textField.placeholder = "검색하고자 하는 지역명을 입력해주세요"
+        textField.autocorrectionType = .no
+        textField.keyboardType = .default // 여기를 .default로 변경
+        textField.delegate = self
         return textField
     }()
     //주소 입력
@@ -34,25 +72,20 @@ class MapPageViewController: UIViewController {
         return titleLabel
     }()
     
-    //지도에서 위치 확인 라벨
-    lazy var mapTitleLabel : UILabel = {
-        let titleLabel = UILabel()
-        titleLabel.text = "가운데 정렬할 텍스트"
-        titleLabel.textAlignment = .center
-        titleLabel.textColor = .black
-        titleLabel.font = UIFont.boldSystemFont(ofSize: 18)
-        return titleLabel
-    }()
     //목표 KM, 경로 탐색 및 취소 버튼
     lazy var goalView: UIView = {
         let view = UIView()
-        let backgroundColor = UIColor.yellow.withAlphaComponent(0.5)
-        view.backgroundColor = backgroundColor
+        if let customColor = UIColor(named: "MainColor") {
+            view.backgroundColor = customColor
+        } else {
+            let backgroundColor = UIColor.yellow.withAlphaComponent(0.5)
+            view.backgroundColor = backgroundColor
+        }
         view.layer.cornerRadius = 20.0
         
         let goalLabel = UILabel()
-        goalLabel.text = "목적지까지"
-        goalLabel.textColor = .gray
+        goalLabel.text = "목적지 : 팀스파르타"
+        goalLabel.textColor = .white
         goalLabel.font = UIFont.systemFont(ofSize: 20)
         goalLabel.numberOfLines = 2
         
@@ -64,8 +97,8 @@ class MapPageViewController: UIViewController {
         }
         
         let kmLabel = UILabel()
-        kmLabel.text = "10 km 남음"
-        kmLabel.textColor = .gray
+        kmLabel.text = "달려 가기(0%)"
+        kmLabel.textColor = .white
         kmLabel.font = UIFont.boldSystemFont(ofSize: 30)
         
         view.addSubview(kmLabel)
@@ -78,11 +111,17 @@ class MapPageViewController: UIViewController {
         stackView.axis = .horizontal
         stackView.spacing = 10
         
-        let buttonWidth: CGFloat = 60
-        let buttonHeight: CGFloat = 40
+        let buttonWidth: CGFloat = 100
+        let buttonHeight: CGFloat = 70
         
         let searchPathButton = UIButton()
-        searchPathButton.backgroundColor = .gray
+        if let customColor = UIColor(named: "MainColor") {
+            searchPathButton.backgroundColor = customColor
+        } else {
+            searchPathButton.backgroundColor = .gray
+        }
+        searchPathButton.layer.borderWidth = 2
+        searchPathButton.layer.borderColor = UIColor.white.cgColor
         searchPathButton.layer.cornerRadius = 10
         searchPathButton.addTarget(self, action: #selector(onSearchPathButtonTapped), for: .touchUpInside)
         searchPathButton.setTitle("탐색", for: .normal)
@@ -91,25 +130,15 @@ class MapPageViewController: UIViewController {
             $0.height.equalTo(buttonHeight)
         }
         
-        let cancelButton = UIButton()
-        cancelButton.backgroundColor = .gray
-        cancelButton.layer.cornerRadius = 10
-        cancelButton.addTarget(self, action: #selector(onCancelButtonTapped), for: .touchUpInside)
-        cancelButton.setTitle("취소", for: .normal)
-        cancelButton.snp.makeConstraints {
-            $0.width.equalTo(buttonWidth)
-            $0.height.equalTo(buttonHeight)
-        }
-        
         stackView.addArrangedSubview(searchPathButton)
-        stackView.addArrangedSubview(cancelButton)
         
         view.addSubview(stackView)
         stackView.snp.makeConstraints {
-            $0.top.equalTo(kmLabel.snp.top)
-            $0.leading.equalTo(kmLabel.snp.trailing).offset(10)
+            $0.top.equalTo(goalLabel.snp.top)
+            $0.leading.equalTo(goalLabel.snp.trailing).offset(10)
             $0.trailing.equalToSuperview().offset(-5)
             $0.height.equalTo(buttonHeight)
+            $0.width.equalTo(buttonWidth)
         }
         return view
         
@@ -148,39 +177,38 @@ class MapPageViewController: UIViewController {
     }()
     
     //하단 뷰
-    lazy var bottomView: UIView = {
+    var bottomView: UIView = {
         let view = UIView()
         view.backgroundColor = .white
         view.layer.cornerRadius = 10
         view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner] // 위쪽 모서리만 라운드 처리
         
-        let IsUsed = false // 하드코딩
+        let circleView = UIView()
+        circleView.backgroundColor =  .red
+        circleView.layer.cornerRadius = 10
+        view.addSubview(circleView)
         
-         let circleView = UIView()
-         circleView.backgroundColor = IsUsed ? .red : .green //하드코딩
-         circleView.layer.cornerRadius = 10
-         view.addSubview(circleView)
-         
-         circleView.snp.makeConstraints {
-             $0.leading.equalToSuperview().offset(20)
-             $0.top.equalToSuperview().offset(20)
-             $0.width.equalTo(20)
-             $0.height.equalTo(20)
-         }
+        circleView.snp.makeConstraints {
+            $0.leading.equalToSuperview().offset(20)
+            $0.top.equalToSuperview().offset(20)
+            $0.width.equalTo(20)
+            $0.height.equalTo(20)
+        }
         
-         let statusLabel = UILabel()
-         statusLabel.text = IsUsed ? "탑승 중" : "탑승 중 아님" //하드코딩
-         statusLabel.textColor = .black
-         statusLabel.font = UIFont.systemFont(ofSize: 20)
-         view.addSubview(statusLabel)
-         
-         statusLabel.snp.makeConstraints {
-             $0.top.equalTo(circleView.snp.top)
-             $0.leading.equalTo(circleView.snp.trailing).offset(5)
-         }
+        let statusLabel = UILabel()
+        
+        statusLabel.text = "탑승중 아님"
+        statusLabel.textColor = .black
+        statusLabel.font = UIFont.systemFont(ofSize: 20)
+        view.addSubview(statusLabel)
+        
+        statusLabel.snp.makeConstraints {
+            $0.top.equalTo(circleView.snp.top)
+            $0.leading.equalTo(circleView.snp.trailing).offset(5)
+        }
         
         let usingTimeLabel = UILabel()
-        usingTimeLabel.text = "이용시간 :" + "10분"
+        usingTimeLabel.text = ""
         usingTimeLabel.textColor = .black
         usingTimeLabel.font = UIFont.systemFont(ofSize: 20)
         view.addSubview(usingTimeLabel)
@@ -193,10 +221,18 @@ class MapPageViewController: UIViewController {
         }
         
         let rideOrReturnButton = UIButton()
-        rideOrReturnButton.backgroundColor = .gray
+        rideOrReturnButton.backgroundColor = .lightGray
         rideOrReturnButton.layer.cornerRadius = 10
         rideOrReturnButton.addTarget(self, action: #selector(onRideOrReturnButtonTapped), for: .touchUpInside)
+        
+        if let customColor = UIColor(named: "MainColor") {
+            rideOrReturnButton.backgroundColor = customColor
+        } else {
+            rideOrReturnButton.backgroundColor = .gray
+        }
         rideOrReturnButton.setTitle("탑승하기", for: .normal)
+        rideOrReturnButton.isEnabled = false
+        rideOrReturnButton.setTitleColor(.gray, for: .disabled)
         
         view.addSubview(rideOrReturnButton)
         rideOrReturnButton.snp.makeConstraints {
@@ -213,54 +249,322 @@ class MapPageViewController: UIViewController {
         let locationManager = CLLocationManager()
         return locationManager
     }()
-    var currentLocationCoordinate: CLLocationCoordinate2D?
+    var isMarkerTouched = false
+    var timerSeconds = 0
+    var usingTimer : Timer?
+    var pathMoveTimer : Timer?
+    var returnLocationCoordinate : NMGLatLng?
+    var markerList : [NMFMarker] = []
+    var currentMarker : NMFMarker?
+    var touchedMarker : NMFMarker?
+    var goal = NMGLatLng(lat: 37.5023270, lng: 127.0444447) //경로 추적시 팀 스파르타 위도 경도 하드코딩
+    var pathLatLng: [NMGLatLng] = []
+    var pathOverlay = NMFPath()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-//        DispatchQueue.main.async{ [weak self] in
-//            guard let self = self else {return}
-//            let memoWriteVC = MapPageInfoController()
-//            memoWriteVC.modalPresentationStyle = .custom
-//            memoWriteVC.transitioningDelegate = self
-//
-//            if let presentationController = memoWriteVC.presentationController as? UISheetPresentationController {
-//                presentationController.detents = [.medium()]
-//            }
-//            present(memoWriteVC, animated: true, completion: nil)
-//
-//        }
         setupLayout()
+        setupUserInfo(isUsing : profile.isUsing)
         setupLocationManagerConfig()
         setupCurrentUserLocationInfo(UserCurrentlat: profile.currentLat, userCurrentlng: profile.currentLng)
+        setupDummyMarkers(UserCurrentlat: profile.currentLat, userCurrentlng: profile.currentLng)
     }
+    func updateMiddelUI(){
+        let goalLabel = goalView.subviews[1] as? UILabel
+        let stackView = goalView.subviews[2] as? UIStackView
+        let searchPathButton = stackView?.subviews[0] as? UIButton
+        if currentIndex > 1
+        {
+            if bMovePathSimulationStart == true{
+                let percent: String
+                if currentIndex >= pathLatLng.count - 1{
+                    percent = "100"
+                } else {
+                    percent = "\(Int((Double(currentIndex) / Double(pathLatLng.count)) * 100))"
+                }
+                if Int(percent)! == 100{
+                    goalLabel!.text = "목적지에 도착!"
+                    pathMoveTimer?.invalidate()
+                    pathMoveTimer = nil
+                    pathOverlay.mapView = nil
+                    searchPathButton!.setTitle("완료", for: .normal)
+                }
+                else{
+                    goalLabel!.text = "달려가는 중.." + percent + "%"
+                }
+            }else{
+              
+            }
+        }
+        if currentIndex >= 0 && currentIndex <= pathLatLng.count {
+            mapView.moveCamera(NMFCameraUpdate(scrollTo: NMGLatLng(lat: pathLatLng[currentIndex].lat, lng: pathLatLng[currentIndex].lng)))
+            currentMarker?.position = NMGLatLng(lat: pathLatLng[currentIndex].lat, lng: pathLatLng[currentIndex].lng)
+        }else{
+            pathLatLng = []
+        }
+    }
+    
+    func updateBomttomUI(){
+        let circleView = bottomView.subviews[0] as UIView
+        let statusLabel = bottomView.subviews[1] as? UILabel
+        let rideOrReturnButton = bottomView.subviews[3] as? UIButton
+        
+        if profile.isUsing == false{
+            circleView.backgroundColor = .red
+            statusLabel?.text = "탑승중 아님"
+            rideOrReturnButton?.setTitle("탑승하기", for: .normal)
+        }
+        else{
+            circleView.backgroundColor = .green
+            statusLabel?.text = "탑승중"
+            rideOrReturnButton?.setTitle("반납하기", for: .normal)
+        }
+    }
+    func setupUserInfo(isUsing : Bool){
+        profile.isLogin = true
+        profile.isUsing = isUsing
+    }
+    func setupDummyMarkers(UserCurrentlat: Double, userCurrentlng: Double) {
+        if let bilBoardInfos = profile.bilBoardInfos {
+            for i in 0..<bilBoardInfos.count {
+                let lat = bilBoardInfos[i].lat
+                let lng = bilBoardInfos[i].lng
+                let marker = NMFMarker()
+                marker.iconTintColor = UIColor.blue
+                marker.position = NMGLatLng(lat: lat, lng: lng)
+                marker.captionColor = UIColor.blue
+                marker.captionHaloColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1)
+                marker.captionText = "퀵보드 대여 가능"
+                marker.captionTextSize = 20
+                markerList.append(marker)
+                marker.mapView = mapView
+            }
+        }
+    }
+    
     func setupLocationManagerConfig(){
-        locationManager.delegate = self
+        mapView.touchDelegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         locationManager.requestWhenInUseAuthorization()
         locationManager.startUpdatingLocation()
     }
+    
+    func mapView(_ mapView: NMFMapView, didTapMap latlng: NMGLatLng, point: CGPoint) {
+        
+        if profile.isUsing {
+            rideOrReturnEnabled(enabled: true)
+            returnLocationCoordinate = NMGLatLng(lat: latlng.lat, lng: latlng.lng)
+            updateBomttomUI()
+        } else {
+            let closestMarker = findClosestMarker(to: latlng)
+            
+            if let marker = closestMarker {
+                isMarkerTouched = true
+                rideOrReturnEnabled(enabled: true)
+                touchedMarker = marker
+                print(touchedMarker)
+            } else {
+                print("인접한 마커가 없습니다.")
+            }
+            updateBomttomUI()
+        }
+    }
+    @objc func onRideOrReturnButtonTapped(){
+        let goalLabel = goalView.subviews[1] as? UILabel
+        let stackView = goalView.subviews[2] as? UIStackView
+        
+        if isMarkerTouched {
+            handleMarkerTouched()
+            startTimer()
+            goalView.isHidden = false
+        } else {
+            handleNoMarkerTouched()
+            endTimer()
+            goalView.isHidden = true
+            pathLatLng = []
+            pathOverlay.mapView = nil
+            currentIndex = 0
+            goalLabel!.text = "달려가기(0%)"
+        }
+    }
+    func startTimer(){
+        usingTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(checkTimer), userInfo: nil, repeats: true)
+    }
+    func endTimer(){
+        let timerLabel = bottomView.subviews[2] as? UILabel
+        if let timerLabel = timerLabel{
+            timerLabel.text = ""
+        }
+        timerSeconds = 0
+        usingTimer?.invalidate()
+    }
+    
+    @objc func checkTimer(){
+        timerSeconds = timerSeconds + 1
+        let timerLabel = bottomView.subviews[2] as? UILabel
+        if let timerLabel = timerLabel{
+            if timerSeconds < 60{
+                timerLabel.text = "\(timerSeconds)초"
+            }else{
+                timerLabel.text = "\(timerSeconds / 60)분 \(timerSeconds % 60)초"
+            }
+        }
+    }
+    func convertPathTolatLatLng(pathDetail : [RouteDetail]){
+        DispatchQueue.global().async { [weak self] in
+            guard let self = self else { return }
+            for i in 0..<pathDetail.count {
+                let pathDetail = pathDetail[i]
+                for j in 0..<pathDetail.path.count {
+                    let pathXY = pathDetail.path[j]
+                    pathLatLng.append(NMGLatLng(lat: pathXY[1], lng: pathXY[0]))
+                }
+            }
+            drawRoutePath()
+        }
+    }
+    func drawRoutePath(){
+        if pathLatLng.count != 0 {
+            pathOverlay = NMFPath()
+            pathOverlay.path = NMGLineString(points: pathLatLng)
+            pathOverlay.color = .red
+            pathOverlay.width = 3
+            DispatchQueue.main.async{ [weak self] in
+                guard let self = self else {return}
+                pathOverlay.mapView = mapView
+            }
+        }
+    }
+    
+    func findRouteAndDraw() {
+        let start = "\(currentMarker!.position.lng),\(currentMarker!.position.lat)"
+        let goal = "\(goal.lng),\(goal.lat)"
+        
+        AddressDecoder.getDirectionRouteData(startCoordinate: start, goalCoordinate: goal) { [weak self] result in
+            guard let self = self else {return}
+            switch result {
+            case .success(let routeData):
+                convertPathTolatLatLng(pathDetail: routeData.route.traoptimal)
+            case .failure(let error):
+                DispatchQueue.main.async{ [weak self] in
+                    guard let self = self else {return }
+                    showAlert(title: "에러", message: "경로 추적 실패: \(error.localizedDescription)")
+                }
+            }
+        }
+    }
+    
+    func handleMarkerTouched() {
+        guard let touchedMarker = touchedMarker else {
+            return
+        }
+        removeMarkerAndMoveCamera(to: NMGLatLng(lat: touchedMarker.position.lat, lng: touchedMarker.position.lng))
+        
+        profile.isUsing = true
+        isMarkerTouched = false
+        
+        if let index = markerList.firstIndex(of: touchedMarker) {
+            markerList.remove(at: index)
+            print("마커 삭제 완료")
+        }
+        
+        currentMarker?.mapView = nil
+        currentMarker = touchedMarker
+        setupCurrentUserLocationInfo(UserCurrentlat: touchedMarker.position.lat, userCurrentlng: touchedMarker.position.lng)
+        
+        updateBomttomUI()
+        rideOrReturnEnabled(enabled: true)
+        findRouteAndDraw()
+    }
+    
+    func handleNoMarkerTouched() {
+        guard let coordinate = returnLocationCoordinate else {
+            return
+        }
+        createMarker(at: coordinate)
+        
+        mapView.setNeedsDisplay()
+        mapView.moveCamera(NMFCameraUpdate(scrollTo: NMGLatLng(lat: coordinate.lat, lng: coordinate.lng)))
+        
+        profile.isUsing = false
+        isMarkerTouched = true
+        
+        currentMarker?.mapView = nil
+        currentMarker?.position = NMGLatLng(lat: coordinate.lat, lng: coordinate.lng)
+        
+        updateBomttomUI()
+        rideOrReturnEnabled(enabled: false)
+    }
+    func rideOrReturnEnabled(enabled : Bool)
+    {
+        let rideOrReturnButton = bottomView.subviews[3] as? UIButton
+        if enabled{
+            rideOrReturnButton?.isEnabled = enabled
+            rideOrReturnButton?.setTitleColor(.black, for: .normal)
+        }else{
+            rideOrReturnButton?.isEnabled = enabled
+            rideOrReturnButton?.setTitleColor(.gray, for: .disabled)
+        }
+    }
+    
+    func findClosestMarker(to targetLatLng: NMGLatLng) -> NMFMarker? {
+        var closerMarker: NMFMarker? = nil
+        let maxDistance: CLLocationDistance = 150.0
+        for marker in markerList {
+            let markerLocation = CLLocation(latitude: marker.position.lat, longitude: marker.position.lng)
+            let targetLocation = CLLocation(latitude: targetLatLng.lat, longitude: targetLatLng.lng)
+            let distance = markerLocation.distance(from: targetLocation)
+            
+            if distance < maxDistance {
+                closerMarker = marker
+                break
+            }
+        }
+        return closerMarker
+    }
+    
     func setupCurrentUserLocationInfo(UserCurrentlat : Double, userCurrentlng : Double){
-        mapView.moveCamera(NMFCameraUpdate(scrollTo: NMGLatLng(lat:UserCurrentlat, lng:userCurrentlng)))
         let marker = NMFMarker()
         marker.position = NMGLatLng(lat: UserCurrentlat, lng: userCurrentlng)
         marker.captionColor = UIColor.blue
         marker.captionHaloColor = UIColor(red: 200.0/255.0, green: 1, blue: 1, alpha: 1)
         marker.captionText = "현위치"
         marker.captionTextSize = 20
+        marker.width = 30
+        marker.height = 30
         marker.mapView = mapView
+        currentMarker = marker
+        mapView.moveCamera(NMFCameraUpdate(scrollTo: NMGLatLng(lat:UserCurrentlat, lng:userCurrentlng)))
     }
+    var bMovePathSimulationStart = false
+    var currentIndex = 1
     @objc func onSearchPathButtonTapped(){
+        let stackView = goalView.subviews[2] as? UIStackView
+        let searchPathButton = stackView?.subviews[0] as? UIButton
+        if bMovePathSimulationStart == false{
+            pathMoveTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(simulationTimer), userInfo: nil, repeats: true)
+            bMovePathSimulationStart = true
+            searchPathButton!.setTitle("취소", for: .normal)
+  
+        }else{
+            pathMoveTimer?.invalidate()
+            bMovePathSimulationStart = false
+            searchPathButton!.setTitle("탐색", for: .normal)
+        }
         print("onSearchPathButtonTapped")
     }
-    @objc func onCancelButtonTapped(){
-        print("onCancelButtonTapped")
-    }
-    @objc func onBackToOriginButtonTapped(){
-        if let latitude = currentLocationCoordinate?.latitude, let longitude = currentLocationCoordinate?.longitude {
-            mapView.moveCamera(NMFCameraUpdate(scrollTo: NMGLatLng(lat:latitude, lng:longitude)))        } else {
+    @objc func simulationTimer(){
+        currentIndex += 100
+        if currentIndex >= pathLatLng.count - 1 {
+            currentIndex = pathLatLng.count - 1
         }
-        
-        //print("onBackToOriginButton")
+        updateMiddelUI()
+    }
+    
+    @objc func onBackToOriginButtonTapped(){
+        if let latitude = currentMarker?.position.lat, let longitude = currentMarker?.position.lng{
+            mapView.moveCamera(NMFCameraUpdate(scrollTo: NMGLatLng(lat : latitude, lng :longitude))
+            )}else{ return}
     }
     @objc func onZoomInButtonTapped(){
         mapView.moveCamera(NMFCameraUpdate.withZoomIn())
@@ -268,26 +572,39 @@ class MapPageViewController: UIViewController {
     @objc func onZoomOutButtonTapped(){
         mapView.moveCamera(NMFCameraUpdate.withZoomOut())
     }
-    @objc func onRideOrReturnButtonTapped(){
-        print("onRideOrReturnButtonTapped")
+    
+    func createMarker(at coordinate: NMGLatLng) {
+        let marker = NMFMarker()
+        marker.iconTintColor = UIColor.blue
+        marker.position = coordinate
+        marker.captionHaloColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1)
+        marker.captionText = "퀵보드 대여 가능"
+        marker.captionTextSize = 20
+        marker.mapView = mapView
+        markerList.append(marker)
+    }
+    
+    func removeMarkerAndMoveCamera(to position: NMGLatLng) {
+        if let touchedMarker = touchedMarker {
+            touchedMarker.mapView = nil
+            mapView.setNeedsDisplay()
+            mapView.moveCamera(NMFCameraUpdate(scrollTo: position))
+        }
     }
     
     func setupLayout() {
         [mapView,addressTitleLabel, addressTextField, goalView,backToOriginButton,zoomInButton,zoomOutButton,bottomView].forEach(view.addSubview)
-        
         mapView.snp.makeConstraints {
             $0.top.equalTo(view.snp.top)
             $0.leading.equalTo(view.safeAreaLayoutGuide.snp.leading)
             $0.trailing.equalTo(view.safeAreaLayoutGuide.snp.trailing)
             $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
         }
-
         addressTitleLabel.snp.makeConstraints {
             $0.centerX.equalToSuperview()
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(20)
             $0.width.equalToSuperview().multipliedBy(0.6)
         }
-    
         addressTextField.snp.makeConstraints {
             $0.centerX.equalToSuperview()
             $0.top.equalTo(addressTitleLabel.snp.bottom).offset(20)
@@ -302,80 +619,42 @@ class MapPageViewController: UIViewController {
             $0.trailing.equalTo(addressTextField.snp.trailing)
             $0.height.equalToSuperview().multipliedBy(0.14)
         }
-        
         backToOriginButton.snp.makeConstraints {
             $0.centerY.equalToSuperview()
             $0.trailing.equalTo(goalView.snp.trailing)
             $0.width.equalToSuperview().multipliedBy(0.05)
             $0.height.equalToSuperview().multipliedBy(0.05)
         }
-        
         zoomInButton.snp.makeConstraints {
             $0.top.equalTo(backToOriginButton.snp.bottom).offset(10)
             $0.trailing.equalTo(backToOriginButton.snp.trailing)
             $0.width.equalToSuperview().multipliedBy(0.05)
             $0.height.equalToSuperview().multipliedBy(0.05)
         }
-        
         zoomOutButton.snp.makeConstraints {
             $0.top.equalTo(zoomInButton.snp.bottom).offset(10)
             $0.trailing.equalTo(zoomInButton.snp.trailing)
             $0.width.equalToSuperview().multipliedBy(0.05)
             $0.height.equalToSuperview().multipliedBy(0.05)
         }
-
         bottomView.snp.makeConstraints{
             $0.leading.equalTo(view.safeAreaLayoutGuide.snp.leading)
             $0.trailing.equalTo(view.safeAreaLayoutGuide.snp.trailing)
             $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
             $0.height.equalToSuperview().multipliedBy(0.15)
         }
-        //        if let goalLabel = goalView.subviews.first as? UILabel {
-        //            goalLabel.text = "ZZ"
-        //        }
+        goalView.isHidden = true
     }
 }
 
-
 extension MapPageViewController: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        currentLocationCoordinate = CLLocationCoordinate2D(latitude: profile.currentLat, longitude: profile.currentLng)
-        print(locations)
+        currentMarker = NMFMarker(position: NMGLatLng(lat: profile.currentLat, lng: profile.currentLng))
     }
-
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         print(error)
     }
 }
 
-class MapPageInfoController : UIViewController
-{
-    override func viewDidLoad() {
-        super.viewDidLoad()
-    }
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        view.backgroundColor = .gray
-        
-        modalPresentationStyle = .overCurrentContext
-    }
-}
-class BottomSheetPresentationController: UIPresentationController {
-    override var frameOfPresentedViewInContainerView: CGRect {
-        guard let containerView = containerView else {
-            return CGRect.zero
-        }
-
-        let height: CGFloat = 200
-        let yPosition = containerView.bounds.height - height
-        return CGRect(x: 0, y: yPosition, width: containerView.bounds.width, height: height)
-    }
-}
-
-extension MapPageViewController: UIViewControllerTransitioningDelegate {
-    func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
-        return BottomSheetPresentationController(presentedViewController: presented, presenting: presenting)
-    }
-}
 
 

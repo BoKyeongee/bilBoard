@@ -27,6 +27,11 @@
 		C0DA0C9C2AA5D7370027A097 /* History.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0DA0C9B2AA5D7370027A097 /* History.swift */; };
 		C0DA0C9E2AA5D7550027A097 /* BoardInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0DA0C9D2AA5D7550027A097 /* BoardInfo.swift */; };
 		C0DA0CA12AA5D8800027A097 /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0DA0CA02AA5D8800027A097 /* Data.swift */; };
+		DC23B60C2AA7761900D0E048 /* ProfileTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC23B60B2AA7761900D0E048 /* ProfileTableViewCell.swift */; };
+		DC23B60E2AA778D700D0E048 /* CollectionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC23B60D2AA778D700D0E048 /* CollectionTableViewCell.swift */; };
+		DC23B6102AA7807100D0E048 /* CollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC23B60F2AA7807100D0E048 /* CollectionViewCell.swift */; };
+		DC23B6122AA78F2E00D0E048 /* HistoryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC23B6112AA78F2E00D0E048 /* HistoryTableViewCell.swift */; };
+		DCB830B02AA7F33E000175E7 /* BoardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCB830AF2AA7F33E000175E7 /* BoardViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -53,6 +58,11 @@
 		C0DA0C9D2AA5D7550027A097 /* BoardInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardInfo.swift; sourceTree = "<group>"; };
 		C0DA0CA02AA5D8800027A097 /* Data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Data.swift; sourceTree = "<group>"; };
 		D5B031B96F6D49FB68029511 /* Pods_bilboard.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_bilboard.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		DC23B60B2AA7761900D0E048 /* ProfileTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileTableViewCell.swift; sourceTree = "<group>"; };
+		DC23B60D2AA778D700D0E048 /* CollectionTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionTableViewCell.swift; sourceTree = "<group>"; };
+		DC23B60F2AA7807100D0E048 /* CollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewCell.swift; sourceTree = "<group>"; };
+		DC23B6112AA78F2E00D0E048 /* HistoryTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryTableViewCell.swift; sourceTree = "<group>"; };
+		DCB830AF2AA7F33E000175E7 /* BoardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardViewController.swift; sourceTree = "<group>"; };
 		F10DB0D3FBD186E9D6E777C6 /* Pods-bilboard.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-bilboard.debug.xcconfig"; path = "Target Support Files/Pods-bilboard/Pods-bilboard.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -98,6 +108,11 @@
 				3BA265002AA61E9200E4663F /* SignUpPageViewController.swift */,
 				5F05CFAA2AA5E6E40076DE47 /* ProfileViewController.swift */,
 				5F05CFAC2AA5E7170076DE47 /* MapPageViewController.swift */,
+				DC23B60B2AA7761900D0E048 /* ProfileTableViewCell.swift */,
+				DC23B60D2AA778D700D0E048 /* CollectionTableViewCell.swift */,
+				DC23B60F2AA7807100D0E048 /* CollectionViewCell.swift */,
+				DC23B6112AA78F2E00D0E048 /* HistoryTableViewCell.swift */,
+				DCB830AF2AA7F33E000175E7 /* BoardViewController.swift */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -299,7 +314,12 @@
 				C07D62D22AA5A6A200E2F447 /* AppDelegate.swift in Sources */,
 				C07D62D42AA5A6A200E2F447 /* SceneDelegate.swift in Sources */,
 				C0DA0C982AA5D5E60027A097 /* UserInfo.swift in Sources */,
+				DC23B6122AA78F2E00D0E048 /* HistoryTableViewCell.swift in Sources */,
+				DC23B60C2AA7761900D0E048 /* ProfileTableViewCell.swift in Sources */,
+				DCB830B02AA7F33E000175E7 /* BoardViewController.swift in Sources */,
+				DC23B6102AA7807100D0E048 /* CollectionViewCell.swift in Sources */,
 				C0DA0C9C2AA5D7370027A097 /* History.swift in Sources */,
+				DC23B60E2AA778D700D0E048 /* CollectionTableViewCell.swift in Sources */,
 				5F05CFA72AA5E6850076DE47 /* AppBoardViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

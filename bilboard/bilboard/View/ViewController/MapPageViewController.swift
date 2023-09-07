@@ -281,7 +281,7 @@ class MapPageViewController: UIViewController, NMFMapViewTouchDelegate {
     }
         override func viewWillAppear(_ animated: Bool) {
             super.viewWillAppear(animated)
-            //setupDummyMarkers(UserCurrentlat: profile.currentLat, userCurrentlng: profile.currentLng)
+            setupDummyMarkers(UserCurrentlat: profile.currentLat, userCurrentlng: profile.currentLng)
         }
     
     func setupDummyNullModel()
@@ -544,7 +544,14 @@ class MapPageViewController: UIViewController, NMFMapViewTouchDelegate {
         if let index = markerList.firstIndex(of: touchedMarker) {
             
             markerList.remove(at: index)
-            print(markerList.count)
+            let boardList = profile.bilBoardInfos
+            for idx in 0..<boardList!.count{
+                if touchedMarker.position.lat == boardList?[idx].lat{
+                    profile.bilBoardInfos?.remove(at: idx)
+                    
+                }
+            }
+
             print("마커 삭제 완료")
         }
         

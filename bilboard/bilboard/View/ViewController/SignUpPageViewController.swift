@@ -6,10 +6,11 @@
 //
 
 import UIKit
+import SwiftSMTP
 
 class SignUpPageViewController: UIViewController {
-
-
+    
+    
     @IBOutlet weak var nickNameValidationText: UILabel!
     @IBOutlet weak var idValidationText: UILabel!
     @IBOutlet weak var pwValidationText: UILabel!
@@ -21,9 +22,15 @@ class SignUpPageViewController: UIViewController {
     @IBOutlet weak var againPwTextField: UITextField!
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var emailNumberTextField: UITextField!
+    @IBOutlet weak var verificationButton: UIButton!
+    
     
     //유효성 검사 라벨들을 outlet collection 으로 묶어줌
     @IBOutlet var defaultHiddenCollection: [UILabel]!
+    
+    //타이머 변수 지정
+    var timer: Timer?
+    var seconds: Int = 180 //타이머를 진행할 총 초수
     
     
     override func viewDidLoad() {
@@ -31,6 +38,11 @@ class SignUpPageViewController: UIViewController {
         for label in defaultHiddenCollection {
             label.isHidden = true
         }
+        emailTimeText.isHidden = true
+        
+        //자동완성 비활성화
+        nickNameTextField.autocorrectionType = .no
+        idTextField.autocorrectionType = .no
         
         //비밀번호 *로 표시
         pwTextField.isSecureTextEntry = true
@@ -51,6 +63,9 @@ class SignUpPageViewController: UIViewController {
         againPwTextField.returnKeyType = .done
         emailTextField.returnKeyType = .done
         emailNumberTextField.returnKeyType = .done
+        
+        //타이머
+        emailTimeText.text = timeString(time:TimeInterval(seconds))
         
         //키보드 이외의 화면 터치 시 키보드 내려감
         setupKeyboardDismissRecognizer()
@@ -218,7 +233,7 @@ class SignUpPageViewController: UIViewController {
               (activeTextField == againPwTextField || activeTextField == emailTextField || activeTextField == emailNumberTextField) else {
             return
         }
-
+        
         if self.view.frame.origin.y == 0 {
             self.view.frame.origin.y -= keyboardSize.height
         }
@@ -243,72 +258,143 @@ class SignUpPageViewController: UIViewController {
     
     //done 버튼 누르면 키보드 숨기기
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-            textField.resignFirstResponder()
-            return true
+        textField.resignFirstResponder()
+        return true
+    }
+    
+    //이메일 인증 버튼
+    @IBAction func emailVerificationButton(_ sender: UIButton) {
+        
+        //smtp 로직
+        let smtp = SMTP(hostname: "smtp.gmail.com", email: "user3rum@gmail.com", password: "ciihfefuexaihugu")
+        
+        let from = Mail.User(name:"BilBoard", email: "user3rum@gmail.com")
+        let to = Mail.User(name: "User", email: emailTextField.text!)
+        
+        let code = "\(Int.random(in: 000000...999999))"
+        
+        let mail = Mail(from: from, to: [to], subject: "[BILBOARD] E-MAIL VERIFICATION", text: "인증번호 \(code) \n" + "APP으로 돌아가 인증번호를 입력해주세요.")
+        
+        smtp.send(mail) { error in
+            if let error = error {
+                print("전송에 실패하였습니다.: \(error)")
+            } else {
+                print("전송에 성공하였습니다!")
+                UserDefaults.standard.set(code, forKey: "emailVerificationCode")
+            }
         }
+        emailTimeText.isHidden = false
+        
+        //타이머
+        if timer == nil {
+            //타이머 시작
+            timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(updateTimerLabel), userInfo: nil, repeats: true)
+        }
+        
+    }
+    
+    @objc func updateTimerLabel() {
+        if seconds > 0 {
+            seconds -= 1
+            emailTimeText.text = timeString(time: TimeInterval(seconds))
+        } else {
+            timer?.invalidate()
+            timer = nil
+            verificationButton.isEnabled = false
+        }
+    }
+    
+    func timeString(time: TimeInterval) -> String {
+        let minutes = Int(time) / 60
+        let seconds = Int(time) % 60
+        return String(format: "%02i:%02i", minutes, seconds)
+    }
+    
+    
+    @IBAction func verifyButtonPressed(_ sender: UIButton) {
+        checkVerificationCode()
+        
+    }
+    
+    func checkVerificationCode() {
+        guard let userInputCode = emailNumberTextField.text else {
+            return
+        }
+        
+        if let savedCode = UserDefaults.standard.string(forKey: "emailVerificationCode"), savedCode == userInputCode {
+            showAlert(title: "성공",message: "인증에 성공하였습니다!")
+            
+            emailTimeText.isHidden = true
+            emailNumberTextField.isHidden = true
+            verificationButton.isHidden = true
+        } else {
+            showAlert(title: "오류", message: "인증번호가 일치하지 않습니다.")
+        }
+    }
     
     @IBAction func signUpButtonTapped(_ sender: UIButton) {
         
-        var errorMessage = ""
+        //텍스트 필드 오류메세지
+        var errorMessage: String?
 
-            if nickNameTextField.text?.isEmpty == true || nickNameValidationText.textColor == .red {
-                errorMessage += "닉네임을 올바르게 입력해주세요.\n"
-            }
-            
-            if idTextField.text?.isEmpty == true || idValidationText.textColor == .red {
-                errorMessage += "아이디를 올바르게 입력해주세요.\n"
-            }
+        if nickNameTextField.text?.isEmpty == true || nickNameValidationText.textColor == .red {
+            errorMessage = "닉네임을 올바르게 입력해주세요."
+        } else if idTextField.text?.isEmpty == true || idValidationText.textColor == .red {
+            errorMessage = "아이디를 올바르게 입력해주세요."
+        } else if pwTextField.text?.isEmpty == true || pwValidationText.textColor == .red {
+            errorMessage = "비밀번호를 올바르게 입력해주세요."
+        } else if againPwTextField.text?.isEmpty == true || againPwValidationText.textColor == .red {
+            errorMessage = "비밀번호 재확인을 올바르게 입력해주세요."
+        } else if emailTextField.text?.isEmpty == true {
+            errorMessage = "이메일은 필수 입력란입니다."
+        } else if emailNumberTextField.text?.isEmpty == true || emailNumberTextField.isHidden == false {
+            errorMessage = "이메일 인증이 필요합니다."
+        }
+
+        if let message = errorMessage {
+            showAlert(message: message)
+            return
+        }
         
-            if pwTextField.text?.isEmpty == true || pwValidationText.textColor == .red {
-                errorMessage += "비밀번호를 올바르게 입력해주세요.\n"
-            }
-        
-            if againPwTextField.text?.isEmpty == true || againPwValidationText.textColor == .red {
-                errorMessage += "비밀번호 재확인을 올바르게 입력해주세요.\n"
-            }
-            if emailTextField.text?.isEmpty == true  {
-                errorMessage += "이메일은 필수 입력란입니다.\n"
-            }
-            if emailNumberTextField.text?.isEmpty == true  {
-                errorMessage += "이메일 인증이 필요합니다.\n"
-            }
-
-
-            if !errorMessage.isEmpty {
-                showAlert(message: errorMessage)
-                return
-            }
-            
+        showAlert(message: "회원가입이 완료되었습니다.", completion: {
             // 모든 유효성 검사를 통과한 경우, UserDefaults에 데이터 저장
             saveUserDataToUserDefaults()
+            // 현재 뷰 컨트롤러를 닫음
+            self.dismiss(animated: true, completion: nil)
+            
+        })
+    
         
         func saveUserDataToUserDefaults() {
             let userData: [String: String] = [
                 "nickName": nickNameTextField.text!,
                 "id": idTextField.text!,
                 "password": pwTextField.text!,
-                "email": emailTextField.text!,
-                "emailNumber": emailNumberTextField.text!
+                "email": emailTextField.text!
             ]
             
             UserDefaults.standard.setValue(userData, forKey: "userData")
         }
-
-        
-        self.performSegue(withIdentifier: "LoginViewController", sender: self)
     }
     
-    func showAlert(message: String) {
-        let alert = UIAlertController(title: "오류", message: message, preferredStyle: .alert)
-        let okAction = UIAlertAction(title: "확인", style: .default, handler: nil)
-        alert.addAction(okAction)
+//    func showAlert(message: String) {
+//        let alert = UIAlertController(title: "오류", message: message, preferredStyle: .alert)
+//        let okAction = UIAlertAction(title: "확인", style: .default, handler: nil)
+//        alert.addAction(okAction)
+//        present(alert, animated: true, completion: nil)
+//    }
+    func showAlert(message: String, completion: (() -> Void)? = nil) {
+        let alert = UIAlertController(title: nil, message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "확인", style: .default, handler: { _ in
+            completion?()
+        }))
         present(alert, animated: true, completion: nil)
     }
     
 }
 
 extension SignUpPageViewController: UITextFieldDelegate {
-   
+    
 }
 //UIView, 모든 하위 클래스에 findFirstResponder 메서드 추가
 extension UIView {

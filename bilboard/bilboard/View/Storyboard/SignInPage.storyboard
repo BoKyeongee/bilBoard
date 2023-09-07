@@ -36,12 +36,6 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PVH-Qi-bL0">
-                                <rect key="frame" x="288" y="551" width="22" height="22"/>
-                                <color key="tintColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                <state key="normal" title="Button" image="eye.slash" catalog="system"/>
-                            </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="g5b-QH-nBl">
                                 <rect key="frame" x="75" y="707" width="242" height="35"/>
                                 <constraints>
@@ -66,7 +60,7 @@
                                 </buttonConfiguration>
                                 <connections>
                                     <action selector="didTapLoginButton:" destination="xDS-oC-iOA" eventType="touchUpInside" id="A6P-n7-uIa"/>
-                                    <segue destination="x08-3A-mOO" kind="show" identifier="MapPageViewController" id="XxM-X3-zxn"/>
+                                    <segue destination="x08-3A-mOO" kind="presentation" identifier="MapPageViewController" modalPresentationStyle="fullScreen" modalTransitionStyle="crossDissolve" id="XxM-X3-zxn"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -75,22 +69,18 @@
                         <constraints>
                             <constraint firstItem="jvB-WX-owm" firstAttribute="top" secondItem="FcI-25-X4H" secondAttribute="bottom" constant="46" id="ClJ-Lr-xwJ"/>
                             <constraint firstItem="16h-N7-5wx" firstAttribute="bottom" secondItem="g5b-QH-nBl" secondAttribute="bottom" constant="76" id="FCo-kP-8RU"/>
-                            <constraint firstItem="PVH-Qi-bL0" firstAttribute="top" secondItem="H7x-qy-pg8" secondAttribute="bottom" constant="39" id="H8i-qr-VDP"/>
                             <constraint firstItem="16h-N7-5wx" firstAttribute="trailing" secondItem="jvB-WX-owm" secondAttribute="trailing" constant="76" id="Lkv-Ab-xWa"/>
                             <constraint firstItem="16h-N7-5wx" firstAttribute="trailing" secondItem="H7x-qy-pg8" secondAttribute="trailing" constant="76" id="Lo8-FX-J4a"/>
                             <constraint firstItem="g5b-QH-nBl" firstAttribute="top" secondItem="jvB-WX-owm" secondAttribute="bottom" constant="47" id="QIs-v6-YZC"/>
                             <constraint firstItem="H7x-qy-pg8" firstAttribute="top" secondItem="31T-ha-vaE" secondAttribute="bottom" constant="36" id="RBL-TO-8Ww"/>
-                            <constraint firstItem="16h-N7-5wx" firstAttribute="trailing" secondItem="PVH-Qi-bL0" secondAttribute="trailing" constant="83" id="RGA-E4-YVu"/>
                             <constraint firstItem="H7x-qy-pg8" firstAttribute="leading" secondItem="16h-N7-5wx" secondAttribute="leading" constant="75" id="aQf-J7-xnN"/>
                             <constraint firstItem="jvB-WX-owm" firstAttribute="leading" secondItem="16h-N7-5wx" secondAttribute="leading" constant="75" id="eSG-LM-85j"/>
                             <constraint firstItem="31T-ha-vaE" firstAttribute="top" secondItem="16h-N7-5wx" secondAttribute="top" constant="85" id="fec-aw-msh"/>
-                            <constraint firstItem="jvB-WX-owm" firstAttribute="top" secondItem="PVH-Qi-bL0" secondAttribute="bottom" constant="52" id="fuz-T1-1DX"/>
                             <constraint firstItem="16h-N7-5wx" firstAttribute="trailing" secondItem="31T-ha-vaE" secondAttribute="trailing" constant="76" id="hiF-Bf-e8Y"/>
                             <constraint firstItem="16h-N7-5wx" firstAttribute="trailing" secondItem="g5b-QH-nBl" secondAttribute="trailing" constant="76" id="jAk-nJ-qYd"/>
                             <constraint firstItem="FcI-25-X4H" firstAttribute="leading" secondItem="16h-N7-5wx" secondAttribute="leading" constant="75" id="jUg-og-om9"/>
                             <constraint firstItem="16h-N7-5wx" firstAttribute="trailing" secondItem="FcI-25-X4H" secondAttribute="trailing" constant="76" id="pfP-Yi-GTC"/>
                             <constraint firstItem="FcI-25-X4H" firstAttribute="top" secondItem="H7x-qy-pg8" secondAttribute="bottom" constant="33" id="sT2-4y-H7t"/>
-                            <constraint firstItem="PVH-Qi-bL0" firstAttribute="leading" secondItem="16h-N7-5wx" secondAttribute="leading" constant="288" id="slI-Er-7yd"/>
                             <constraint firstItem="31T-ha-vaE" firstAttribute="leading" secondItem="16h-N7-5wx" secondAttribute="leading" constant="75" id="tmd-Bt-xHl"/>
                             <constraint firstItem="g5b-QH-nBl" firstAttribute="leading" secondItem="16h-N7-5wx" secondAttribute="leading" constant="75" id="xXT-Ti-Dx8"/>
                         </constraints>
@@ -129,7 +119,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="eye.slash" catalog="system" width="128" height="84"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

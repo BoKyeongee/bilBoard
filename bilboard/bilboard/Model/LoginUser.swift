@@ -7,9 +7,9 @@
 
 import Foundation
 
-struct User {
-    var username: String
-    var password: String
-}
-
-let registeredUsers = [User(username: "nauu400", password: "kndong11!")]
+//struct User {
+//    var username: String
+//    var password: String
+//}
+//
+//let registeredUsers = [User(username: "nauu400", password: "kndong11!")]

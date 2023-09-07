@@ -12,6 +12,7 @@
 		3BA265052AA61EB000E4663F /* SignUpPage.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3BA265042AA61EB000E4663F /* SignUpPage.storyboard */; };
 		3BA265092AA855BF00E4663F /* LoginUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BA265082AA855BF00E4663F /* LoginUser.swift */; };
 		3BA2650C2AA8685300E4663F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3BA2650A2AA8685300E4663F /* Main.storyboard */; };
+		3BA265182AA892E100E4663F /* SwiftSMTP in Frameworks */ = {isa = PBXBuildFile; productRef = 3BA265172AA892E100E4663F /* SwiftSMTP */; };
 		5F05CFA72AA5E6850076DE47 /* AppBoardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F05CFA62AA5E6850076DE47 /* AppBoardViewController.swift */; };
 		5F05CFA92AA5E6D30076DE47 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F05CFA82AA5E6D30076DE47 /* LoginViewController.swift */; };
 		5F05CFAB2AA5E6E40076DE47 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F05CFAA2AA5E6E40076DE47 /* ProfileViewController.swift */; };
@@ -83,6 +84,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3BA265182AA892E100E4663F /* SwiftSMTP in Frameworks */,
 				975230C801BEC377FA423E99 /* Pods_bilboard.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -237,6 +239,9 @@
 			dependencies = (
 			);
 			name = bilboard;
+			packageProductDependencies = (
+				3BA265172AA892E100E4663F /* SwiftSMTP */,
+			);
 			productName = bilboard;
 			productReference = C07D62CE2AA5A6A200E2F447 /* bilboard.app */;
 			productType = "com.apple.product-type.application";
@@ -265,6 +270,9 @@
 				Base,
 			);
 			mainGroup = C07D62C52AA5A6A200E2F447;
+			packageReferences = (
+				3BA265162AA892E100E4663F /* XCRemoteSwiftPackageReference "Swift-SMTP" */,
+			);
 			productRefGroup = C07D62CF2AA5A6A200E2F447 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -580,6 +588,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		3BA265162AA892E100E4663F /* XCRemoteSwiftPackageReference "Swift-SMTP" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/IBM-Swift/Swift-SMTP";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 6.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		3BA265172AA892E100E4663F /* SwiftSMTP */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3BA265162AA892E100E4663F /* XCRemoteSwiftPackageReference "Swift-SMTP" */;
+			productName = SwiftSMTP;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = C07D62C62AA5A6A200E2F447 /* Project object */;
 }

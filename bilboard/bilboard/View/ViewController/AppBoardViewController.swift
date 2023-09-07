@@ -7,14 +7,18 @@
 
 import UIKit
 import Foundation
+import NMapsMap
+import SnapKit
+
 
 class AppBoardViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
     
-        
+    let Btn = UIColor(named: "Main")
+    
     let ACTIVITY_NAME = "A_Picker"
     
-    let arr = ["서울" , "대구", "부산", "부천"] // [피커 뷰에 표시될 리스트]
-    let arr2 = ["킥보드1" , "킥보드2", "킥보드3", "싸제"]
+    let arr = ["서울 자곡로 102" , "대구 안심로 261 ", "제주시 오등동 1100로", "부천시 중동로 22번길 64"] // [피커 뷰에 표시될 리스트]
+    let arr2 = ["basic", "premium"]
     
     
     var choiceItem = "" { // [변수 값이 변경 되면 동시에 텍스트 필드 값 UI 업데이트 실시]
@@ -23,8 +27,18 @@ class AppBoardViewController: UIViewController, UIPickerViewDelegate, UIPickerVi
         }
     }
     
+    var choiceItem2 = "" { // [변수 값이 변경 되면 동시에 텍스트 필드 값 UI 업데이트 실시]
+        didSet {
+            self.tfType.text = self.choiceItem2
+        }
+    }
+    
+    
+    
     var pickerView : UIPickerView? = nil
+    var pickerViewType : UIPickerView?
     var toolBar : UIToolbar? = nil
+    
     
     
     @IBOutlet weak var lbMy: UILabel!
@@ -32,9 +46,7 @@ class AppBoardViewController: UIViewController, UIPickerViewDelegate, UIPickerVi
     
     @IBOutlet weak var tfAddress: UITextField!
     
-    
-    @IBOutlet weak var tfAddressDetail: UITextField!
-    
+        
     
     
     @IBOutlet weak var tfType: UITextField!
@@ -43,8 +55,7 @@ class AppBoardViewController: UIViewController, UIPickerViewDelegate, UIPickerVi
     
     @IBOutlet weak var btnRegister: UIButton!
     
-    
-    
+        
     override func viewDidLoad() {
         super.viewDidLoad()
         print("")
@@ -56,7 +67,7 @@ class AppBoardViewController: UIViewController, UIPickerViewDelegate, UIPickerVi
         // [뷰 정의 및 초기화 함수 호출]
         self.setView()
         
-       // self.btnRegister.layer.cornerRadius(50)
+        // self.btnRegister.layer.cornerRadius(50)
         
         
     }
@@ -69,7 +80,7 @@ class AppBoardViewController: UIViewController, UIPickerViewDelegate, UIPickerVi
         print("====================================")
         print("")
     }
-        
+    
     
     
     
@@ -84,7 +95,7 @@ class AppBoardViewController: UIViewController, UIPickerViewDelegate, UIPickerVi
         print("")
         
     }
-        
+    
     
     
     
@@ -98,7 +109,7 @@ class AppBoardViewController: UIViewController, UIPickerViewDelegate, UIPickerVi
         print("====================================")
         print("")
     }
-        
+    
     
     
     
@@ -136,13 +147,16 @@ class AppBoardViewController: UIViewController, UIPickerViewDelegate, UIPickerVi
         
         // [비동기 처리 수행]
         DispatchQueue.main.async {
-
+            
             // [텍스트 필드 속성 설정 실시]
-            self.tfAddress.tintColor = .clear // 틴트 색상
-            self.tfAddress.layer.borderWidth = 1 // 테두리 굵기
-            self.tfAddress.layer.borderColor = UIColor.black.cgColor // 테두리 색상
-            self.tfAddress.text = "주소를 입력하세요." // 초기 텍스트 설정
-            self.tfAddress.textAlignment = .center // 텍스트 정렬
+            //self.tfAddress.tintColor = .clear // 틴트 색상
+            //self.tfAddress.layer.borderWidth = 0.5 // 테두리 굵기
+            //self.tfAddress.layer.borderColor = UIColor.lightGray.cgColor // 테두리 색상
+            //self.tfType.layer.borderColor = UIColor.lightGray.cgColor // 테두리 색상
+            //self.tfAddress.layer.cornerRadius = 50
+            //self.tfType.layer.cornerRadius = 50
+            self.tfAddress.text = "" // 초기 텍스트 설정
+            self.tfAddress.textAlignment = .left// 텍스트 정렬
             //self.textField.delegate = self // 딜리게이트 지정
             self.tfAddress.addTarget(self, action: #selector(self.textFieldTouchDown), for: .touchDown)
             
@@ -151,14 +165,29 @@ class AppBoardViewController: UIViewController, UIPickerViewDelegate, UIPickerVi
             self.tfAddress.inputView = self.pickerView // 피커 뷰를 텍스트 필드 inputMode 로 지정
             self.pickerView!.dataSource = self // 데이터 소스 설정
             self.pickerView!.delegate = self // 딜리게이트 지정
+            //
+            self.pickerViewType = UIPickerView()
+            self.tfType.inputView = self.pickerViewType
+            self.pickerViewType?.dataSource = self
+            self.pickerViewType!.delegate = self
             
-
             
-            // [툴바 설정 실시]
+            
+            
+            
+            
+            // "tfAddress"에 대한 툴바 설정
             self.toolBar = UIToolbar(frame: CGRect(x: 0, y: 0, width: self.view.bounds.size.width, height: 50))
             let button = UIBarButtonItem(title: "선택", style: .plain, target: self, action: #selector(self.choiceButton))
             self.toolBar!.setItems([UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil), button], animated: false)
             self.tfAddress.inputAccessoryView = self.toolBar
+            self.toolBar?.backgroundColor = .darkGray
+
+            // "tfType"에 대한 툴바 설정
+            self.toolBar = UIToolbar(frame: CGRect(x: 0, y: 0, width: self.view.bounds.size.width, height: 50))
+            let buttonType = UIBarButtonItem(title: "선택", style: .plain, target: self, action: #selector(self.choiceButtonType))
+            self.toolBar!.setItems([UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil), buttonType], animated: false)
+            self.tfType.inputAccessoryView = self.toolBar
             self.toolBar?.backgroundColor = .darkGray
         }
     }
@@ -182,7 +211,20 @@ class AppBoardViewController: UIViewController, UIPickerViewDelegate, UIPickerVi
         self.tfAddress.resignFirstResponder()
     }
     
-
+    @objc func choiceButtonType() {
+        print("")
+        print("====================================")
+        print("[\(self.ACTIVITY_NAME) >> choiceButtonType() :: 툴바 버튼 클릭 이벤트 수행]")
+        print("====================================")
+        print("")
+        
+        // "선택"을 클릭하면 데이터를 텍스트 필드에 입력한 다음 입력 창을 닫습니다.
+        let row = self.pickerViewType!.selectedRow(inComponent: 0)
+        self.pickerViewType!.selectRow(row, inComponent: 0, animated: false)
+        self.tfType.text = self.arr2[row]
+        self.tfType.resignFirstResponder()
+    }
+    
     
     
     
@@ -194,50 +236,95 @@ class AppBoardViewController: UIViewController, UIPickerViewDelegate, UIPickerVi
     }
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return self.arr.count
+        if pickerView === self.pickerView {
+            return self.arr.count // tfAddress에 대한 데이터 개수
+        } else if pickerView === pickerViewType {
+            return self.arr2.count // tfType에 대한 데이터 개수
+        } else {
+            return 0
+        }
     }
-    
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        /*
-        print("")
-        print("====================================")
-        print("[\(self.ACTIVITY_NAME) >> titleForRow() :: 피커 뷰에 배열 리스트 명칭을 넘김]")
-        print("====================================")
-        print("")
-        // */
-        return self.arr[row]
+        if pickerView === self.pickerView {
+            return self.arr[row] // tfAddress에 대한 데이터
+        } else if pickerView === pickerViewType {
+            return self.arr2[row] // tfType에 대한 데이터
+        } else {
+            return nil
+        }
     }
-    
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        print("")
-        print("====================================")
-        print("[\(self.ACTIVITY_NAME) >> didSelectRow() :: 피커 뷰 목록 리스트 이동]")
-        print("item :: \(self.arr[row])")
-        print("====================================")
-        print("")
-        
-        
-        // [텍스트 필드 값을 바꿔주는 변수]
-        self.choiceItem = self.arr[row]
+        if pickerView === self.pickerView {
+            self.choiceItem = self.arr[row] // tfAddress의 선택된
+        } else if pickerView === pickerViewType {
+            self.choiceItem2 = self.arr2[row] // tfType의 선택된 값
+        }
+        print(row)
     }
     
     func pickerView(_ pickerView: UIPickerView, rowHeightForComponent component: Int) -> CGFloat {
         /*
-        print("")
-        print("====================================")
-        print("[\(self.ACTIVITY_NAME) >> rowHeightForComponent() :: 피커 뷰 목록 높이 설정]")
-        print("====================================")
-        print("")
-        // */
-        return 60
+         print("")
+         print("====================================")
+         print("[\(self.ACTIVITY_NAME) >> rowHeightForComponent() :: 피커 뷰 목록 높이 설정]")
+         print("====================================")
+         print("")
+         // */
+        return 50
     }
+    
+    
+    @IBAction func btnRegister(_ sender: Any) {
+        print(tfAddress.text)
+        var latitude = 0.0
+        var longitude = 0.0
+        
+        if let address = tfAddress.text, !address.isEmpty {
+            print("if let address")
+            AddressDecoder.getGeocodeAddress(query: address) { [weak self] result in
+                guard let self = self else {return}
+                switch result {
+                case .success(let geocode):
+                    if let firstAddress = geocode.addresses.first {
+                        latitude = Double(firstAddress.latitude)!
+                        longitude = Double(firstAddress.longitude)!
+                        DispatchQueue.main.async{ [weak self] in
+                            guard let self = self else {return }
+                            if tfType.text == "basic" {
+                                            profile.bilBoardInfos!.append(BoardInfo(address: tfAddress.text!, boardType:.basic , boardID: (profile.bilBoardInfos?.last!.boardID)! + 1, registerTime: Date().GetCurrentTime(), lat : latitude, lng : longitude))
+                                          } else if tfType.text == "premium" {
+                                            profile.bilBoardInfos!.append(BoardInfo(address: tfAddress.text!, boardType:.premium , boardID: (profile.bilBoardInfos?.last!.boardID)! + 1, registerTime: Date().GetCurrentTime(), lat : latitude, lng : longitude))
+                                          }
+                                          print(profile.bilBoardInfos)
+                                        }
+                        
+                        print(latitude)
+                        print(longitude)
+                        // 주소를 찾아 위도와 경도를 얻어왔지만, 지도 이동 부분을 비활성화
+                        // 주소를 찾아도 지도 이동을 원하지 않으면 아무것도 추가하지 않아도 됩니다.
+                    } else {
+                        DispatchQueue.main.async{ [weak self] in
+                            guard let self = self else {return }
+                            // 주소를 찾을 수 없을 경우 경고 표시
+                            showAlert(title: "에러", message: "주소를 찾을 수 없습니다")
+                        }
+                    }
+                case .failure(let error):
+                    DispatchQueue.main.async{ [weak self] in
+                        guard let self = self else {return }
+                        // 주소 디코딩 중에 오류가 발생한 경우 오류 알림 표시
+                        showAlert(title: "에러", message: "주소 디코딩 오류: \(error.localizedDescription)")
+                    }
+                }
+            }
+            //textField.resignFirstResponder()
+        }
+        
+    }
+    
+    
+
+    
 }
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
+

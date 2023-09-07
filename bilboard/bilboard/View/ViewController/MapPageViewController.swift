@@ -263,6 +263,7 @@ class MapPageViewController: UIViewController, NMFMapViewTouchDelegate {
     var touchedMarker : NMFMarker?
     var goal = NMGLatLng(lat: 37.5023270, lng: 127.0444447) //경로 추적시 팀 스파르타 위도 경도 하드코딩
     var pathLatLng: [NMGLatLng] = []
+    var additionalMarker : [NMFMarker] = []
     var pathOverlay = NMFPath()
     var bMovePathSimulationStart = false
     var currentIndex = 1
@@ -280,7 +281,7 @@ class MapPageViewController: UIViewController, NMFMapViewTouchDelegate {
     }
         override func viewWillAppear(_ animated: Bool) {
             super.viewWillAppear(animated)
-            setupDummyMarkers(UserCurrentlat: profile.currentLat, userCurrentlng: profile.currentLng)
+            //setupDummyMarkers(UserCurrentlat: profile.currentLat, userCurrentlng: profile.currentLng)
         }
     
     func setupDummyNullModel()
@@ -398,7 +399,6 @@ class MapPageViewController: UIViewController, NMFMapViewTouchDelegate {
                 isMarkerTouched = true
                 rideOrReturnEnabled(enabled: true)
                 touchedMarker = marker
-                print(touchedMarker)
                 let rideOrReturnButton = bottomView.subviews[3] as? UIButton
                 let customColor = UIColor(named: "MainColor")
                 rideOrReturnButton?.backgroundColor = customColor
@@ -416,6 +416,14 @@ class MapPageViewController: UIViewController, NMFMapViewTouchDelegate {
         pathMoveTimer?.invalidate()
         pathMoveTimer = nil
         if isMarkerTouched {
+            
+            for additionalmarker in additionalMarker{
+                let findMarker = findClosestAdditionalMarker(to: NMGLatLng(lat: touchedMarker!.position.lat, lng: touchedMarker!.position.lng))
+                if findMarker != nil{
+                    findMarker!.mapView = nil
+                }
+            }
+            
             handleMarkerTouched()
             startTimer()
             goalView.isHidden = false//추가
@@ -444,6 +452,16 @@ class MapPageViewController: UIViewController, NMFMapViewTouchDelegate {
             profile.usageHistory?.append(userHistory!)
             print("count -> \(profile.usageHistory?.count)")
             
+            
+            let marker = NMFMarker()
+            marker.iconTintColor = UIColor.blue
+            marker.position = NMGLatLng(lat: currentMarker!.position.lat + 0.000000002, lng: currentMarker!.position.lng + 0.000000002)
+            marker.captionColor = UIColor.blue
+            marker.captionHaloColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1)
+            marker.captionText = "퀵보드 대여 가능"
+            marker.captionTextSize = 20
+            marker.mapView = mapView
+            additionalMarker.append(marker)
         }
     }
     func startTimer(){
@@ -589,6 +607,20 @@ class MapPageViewController: UIViewController, NMFMapViewTouchDelegate {
         }
         return closerMarker
     }
+    func findClosestAdditionalMarker(to targetLatLng: NMGLatLng) -> NMFMarker? {
+        var closerMarker: NMFMarker? = nil
+        let maxDistance: CLLocationDistance = 150.0
+        for marker in additionalMarker {
+            let markerLocation = CLLocation(latitude: marker.position.lat, longitude: marker.position.lng)
+            let targetLocation = CLLocation(latitude: targetLatLng.lat, longitude: targetLatLng.lng)
+            let distance = markerLocation.distance(from: targetLocation)
+            if distance < maxDistance {
+                closerMarker = marker
+                break
+            }
+        }
+        return closerMarker
+    }
     
     func setupCurrentUserLocationInfo(UserCurrentlat : Double, userCurrentlng : Double){
         let marker = NMFMarker()
@@ -659,7 +691,7 @@ class MapPageViewController: UIViewController, NMFMapViewTouchDelegate {
                     mapView.moveCamera(NMFCameraUpdate(scrollTo: position))
                 }
             }
-            if (currentMarker?.position.lat == marker.position.lat) && (currentMarker?.position.lng == marker.position.lng)
+            if (currentMarker?.position.lat == marker.position.lat) && (currentMarker?.position.lng == marker.position.lng )
             {
                 marker.mapView = nil
                 if let touchedMarker = touchedMarker {

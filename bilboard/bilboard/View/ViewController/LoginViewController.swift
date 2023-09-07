@@ -23,6 +23,9 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         //비밀번호 *로 표시
         logInPwTextField.isSecureTextEntry = true
         
+        //비밀번호 강력한 암호 설정 비활성화
+        logInPwTextField.passwordRules = nil
+        
         //키보드 done 버튼 생성
         logInIdTextField.returnKeyType = .done
         logInPwTextField.returnKeyType = .done
@@ -53,8 +56,8 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         }
         
         // 유저디폴트와 비교
-        if let savedUsername = UserDefaults.standard.string(forKey: "savedUsername"),
-           let savedPassword = UserDefaults.standard.string(forKey: "savedPassword"),
+        if let savedUsername = UserDefaults.standard.string(forKey: "id"),
+           let savedPassword = UserDefaults.standard.string(forKey: "password"),
            savedUsername == username && savedPassword == password {
             print("로그인 되었습니다.")
             performSegue(withIdentifier: "MapPageViewController", sender: self)
@@ -99,6 +102,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     @objc func dismissKeyboard() {
         self.view.endEditing(true)
     }
+    
     
     //done 버튼 누르면 키보드 숨기기
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {

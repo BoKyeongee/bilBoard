@@ -10,7 +10,8 @@ import Foundation
 
 class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
-    var historyData = [history1, history2]
+    var historyData = profile.usageHistory
+    var historyHardDummy = [history1, history2]
     var userInfo = profile
     
     // section 개수 반환
@@ -28,7 +29,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     // 각 section 당 cell 개수 반환
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
-            case 2: return historyData.count
+        case 2: return historyData?.count ?? 0
             default: return 1
         }
     }
@@ -75,7 +76,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
             return collectionCell
         case 2:
             guard let historyCell = tableView.dequeueReusableCell(withIdentifier: "historyCell") as? HistoryTableViewCell else {return UITableViewCell()}
-            historyCell.setData(historyData[indexPath.row])
+            historyCell.setData(historyData?[indexPath.row] ?? historyHardDummy[indexPath.row])
             
             historyCell.selectionStyle = .none
             historyCell.historyCellBox.backgroundColor = UIColor(named: "MainColor")

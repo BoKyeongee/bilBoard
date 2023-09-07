@@ -9,10 +9,6 @@ import UIKit
 import Foundation
 
 class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
-
-    var historyData = profile.usageHistory
-    var historyHardDummy = [history1, history2]
-    var userInfo = profile
     
     // section 개수 반환
     func numberOfSections(in tableView: UITableView) -> Int {3}
@@ -29,7 +25,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     // 각 section 당 cell 개수 반환
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
-        case 2: return historyData?.count ?? 0
+        case 2: return profile.usageHistory?.count ?? 0
             default: return 1
         }
     }
@@ -48,8 +44,8 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         switch indexPath.section {
         case 0:
             guard let profileCell = tableView.dequeueReusableCell(withIdentifier: "profileCell") as? ProfileTableViewCell else {return UITableViewCell()}
-                profileCell.setData(userInfo)
-            switch userInfo.isUsing {
+                profileCell.setData(profile)
+            switch profile.isUsing {
             case true:
                 profileCell.statusLabel.text = "🛴 사용중"
                 profileCell.statusWrap.backgroundColor = UIColor(named: "UsingColor")
@@ -72,11 +68,12 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
             guard let collectionCell = tableView.dequeueReusableCell(withIdentifier: "collectionCell") as? CollectionTableViewCell else {return UITableViewCell()}
             
             collectionCell.selectionStyle = .none
+            collectionCell.collectionView.reloadData()
             
             return collectionCell
         case 2:
             guard let historyCell = tableView.dequeueReusableCell(withIdentifier: "historyCell") as? HistoryTableViewCell else {return UITableViewCell()}
-            historyCell.setData(historyData?[indexPath.row] ?? historyHardDummy[indexPath.row])
+            historyCell.setData(profile.usageHistory![indexPath.row])
             
             historyCell.selectionStyle = .none
             historyCell.historyCellBox.backgroundColor = UIColor(named: "MainColor")
@@ -113,9 +110,14 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        var historyData = profile.usageHistory
+        
+        let collectionCell = tableView.dequeueReusableCell(withIdentifier: "collectionCell") as! CollectionTableViewCell
         tableView.reloadData()
+        collectionCell.collectionView.reloadData()
+        collectionCell.setNeedsDisplay()
+        
     }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -125,6 +127,9 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         
         // tableView 줄 없앰
         tableView.separatorStyle = UITableViewCell.SeparatorStyle.none
+        
+        tableView.reloadData()
+        tableView.setNeedsDisplay()
 }
 
 

@@ -271,6 +271,16 @@ class SignUpPageViewController: UIViewController, UITextFieldDelegate {
     
     //이메일 인증 버튼
     @IBAction func emailVerificationButton(_ sender: UIButton) {
+       
+        //이메일 형식에 대한 유효성 검사
+        guard let email = emailTextField.text, isValidEmail(email) else {
+                // 유효하지 않은 이메일 형식에 대한 처리 (예: 알림을 보여주기)
+            let alert = UIAlertController(title: "오류", message: "유효하지 않은 이메일 형식입니다.", preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "확인", style: .default, handler: nil))
+                    present(alert, animated: true)
+                print("유효하지 않은 이메일 형식입니다.")
+                return
+            }
         
         //smtp 로직
         let smtp = SMTP(hostname: "smtp.gmail.com", email: "user3rum@gmail.com", password: "ciihfefuexaihugu")
@@ -278,7 +288,7 @@ class SignUpPageViewController: UIViewController, UITextFieldDelegate {
         let from = Mail.User(name:"BilBoard", email: "user3rum@gmail.com")
         let to = Mail.User(name: "User", email: emailTextField.text!)
         
-        let code = "\(Int.random(in: 000000...999999))"
+        let code = "\(Int.random(in: 100000...999999))"
         
         let mail = Mail(from: from, to: [to], subject: "[BILBOARD] E-MAIL VERIFICATION", text: "인증번호 \(code) \n" + "APP으로 돌아가 인증번호를 입력해주세요.")
         
@@ -298,6 +308,12 @@ class SignUpPageViewController: UIViewController, UITextFieldDelegate {
             timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(updateTimerLabel), userInfo: nil, repeats: true)
         }
         
+    }
+    //이메일 형식에 대한 유효성 검사
+    func isValidEmail(_ email: String) -> Bool {
+        let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Z0-9a-z.-]+\\.[A-Za-z]{2,}"
+        let emailTest = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
+        return emailTest.evaluate(with: email)
     }
     
     @objc func updateTimerLabel() {
@@ -370,11 +386,6 @@ class SignUpPageViewController: UIViewController, UITextFieldDelegate {
             "id": idTextField.text!,
             "password": pwTextField.text!,
             "email": emailTextField.text!,
-//            "isUsing": false,
-//            "isLogin": false,
-//            "profileImageUrl": "",
-//            "usageHistory": [],
-//            "bilBoardInfos": [],
             "currentLat": 37.481776875776,
             "currentLng": 126.79742178525
         ]
@@ -387,11 +398,6 @@ class SignUpPageViewController: UIViewController, UITextFieldDelegate {
             UserDefaults.standard.set(idTextField.text, forKey: "id")
             UserDefaults.standard.set(pwTextField.text, forKey: "password")
             UserDefaults.standard.set(emailTextField.text, forKey: "email")
-//            UserDefaults.standard.set(false, forKey: "isUsing")
-//            UserDefaults.standard.set(false, forKey: "isLogin")
-//            UserDefaults.standard.set("", forKey: "profilImageUrl")
-//            UserDefaults.standard.set([], forKey: "usageHistory")
-//            UserDefaults.standard.set([], forKey: "bilBoardInfos")
             UserDefaults.standard.set(37.481776875776, forKey: "currentLat")
             UserDefaults.standard.set(126.79742178525, forKey: "currentLng")
             

@@ -40,20 +40,6 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         
         
     }
-    func getIDInfo() -> UserInfo? {
-        if let userData = UserDefaults.standard.dictionary(forKey: "userData") {
-            if let nickName = userData["nickName"] as? String,
-               let id = userData["id"] as? String,
-               let password = userData["password"] as? String,
-               let email = userData["email"] as? String,
-               let currentLat = userData["currentLat"] as? Double,
-               let currentLng = userData["currentLng"] as? Double {
-               let userInfo = UserInfo(nickname: nickName, userId: id, userPw: password, email: email, isUsing: false, isLogin: false, profileImgName: nil, usageHistory: nil, bilBoardInfos: nil, currentLat: currentLat, currentLng: currentLng)
-                return userInfo
-            }
-        }
-        return nil
-    }
     
     func getIDInfo() -> UserInfo? {
         if let userData = UserDefaults.standard.dictionary(forKey: "userData") {

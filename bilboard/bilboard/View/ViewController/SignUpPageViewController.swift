@@ -370,6 +370,11 @@ class SignUpPageViewController: UIViewController, UITextFieldDelegate {
             "id": idTextField.text!,
             "password": pwTextField.text!,
             "email": emailTextField.text!,
+//            "isUsing": false,
+//            "isLogin": false,
+//            "profileImageUrl": "",
+//            "usageHistory": [],
+//            "bilBoardInfos": [],
             "currentLat": 37.481776875776,
             "currentLng": 126.79742178525
         ]
@@ -382,6 +387,11 @@ class SignUpPageViewController: UIViewController, UITextFieldDelegate {
             UserDefaults.standard.set(idTextField.text, forKey: "id")
             UserDefaults.standard.set(pwTextField.text, forKey: "password")
             UserDefaults.standard.set(emailTextField.text, forKey: "email")
+//            UserDefaults.standard.set(false, forKey: "isUsing")
+//            UserDefaults.standard.set(false, forKey: "isLogin")
+//            UserDefaults.standard.set("", forKey: "profilImageUrl")
+//            UserDefaults.standard.set([], forKey: "usageHistory")
+//            UserDefaults.standard.set([], forKey: "bilBoardInfos")
             UserDefaults.standard.set(37.481776875776, forKey: "currentLat")
             UserDefaults.standard.set(126.79742178525, forKey: "currentLng")
             

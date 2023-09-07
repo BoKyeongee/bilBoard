@@ -88,7 +88,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         }
         
         
-        //로그인 실패 메세지
+        //로그인 실패 메세지.
         let alert = UIAlertController(title: "오류", message: "아이디 또는 비밀번호를 다시 확인해주세요.", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "확인", style: .default))
         present(alert, animated: true)

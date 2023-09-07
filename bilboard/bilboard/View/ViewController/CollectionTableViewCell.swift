@@ -49,7 +49,7 @@ class CollectionTableViewCell: UITableViewCell, UICollectionViewDelegate, UIColl
     // collectionViewCell 반환
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        let boardCell = collectionView.dequeueReusableCell(withReuseIdentifier: "collectionCell", for: indexPath) as! CollectionViewCell
+        let boardCell = collectionView.dequeueReusableCell(withReuseIdentifier: "boardCell", for: indexPath) as! CollectionViewCell
         boardCell.setNeedsDisplay()
         
         boardCell.setData(profile.bilBoardInfos![indexPath.item])

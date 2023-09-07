@@ -23,11 +23,12 @@ class ProfileTableViewCell: UITableViewCell {
         nicknameLabel.text = profile.nickname
         emailLabel.text = profile.email
         
-        // image url 받아서 띄우는 method 삽입 필요
-        // alamofire package 필요
-        // let url = profile.profileImageUrl
-        // let imageName = loadImage(url)
-        // profileImageView.image = imageName
+        guard profile.profileImgName != nil else {
+            profileImageView.image = UIImage(named: "default-profile")
+            return
+        }
+        
+        profileImageView.image = UIImage(named: profile.profileImgName!)
     }
     
     override func awakeFromNib() {

@@ -24,9 +24,36 @@
                                 <rect key="frame" x="0.0" y="0.0" width="393" height="769"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <view key="tableHeaderView" contentMode="scaleToFill" id="y6T-bH-y3L">
+                                    <rect key="frame" x="0.0" y="0.0" width="393" height="71"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Profile" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BWE-LP-afg">
+                                            <rect key="frame" x="24" y="25" width="202" height="36"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="30"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3Xp-G7-tH3">
+                                            <rect key="frame" x="254" y="28" width="122" height="33"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <state key="normal" title="Button"/>
+                                            <buttonConfiguration key="configuration" style="filled" imagePlacement="trailing" title="로그아웃  " cornerStyle="capsule">
+                                                <imageReference key="image" image="rectangle.portrait.and.arrow.right" catalog="system" symbolScale="small"/>
+                                                <fontDescription key="titleFontDescription" type="system" pointSize="15"/>
+                                                <color key="baseBackgroundColor" name="MainColor"/>
+                                            </buttonConfiguration>
+                                            <connections>
+                                                <action selector="logout:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="fCm-BV-hm2"/>
+                                            </connections>
+                                        </button>
+                                    </subviews>
+                                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                </view>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="profileCell" rowHeight="120" id="MrW-0T-eAF" customClass="ProfileTableViewCell" customModule="bilboard" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="50" width="393" height="120"/>
+                                        <rect key="frame" x="0.0" y="121" width="393" height="120"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" tableViewCell="MrW-0T-eAF" id="s4d-Ng-QO2">
                                             <rect key="frame" x="0.0" y="0.0" width="393" height="120"/>
@@ -37,18 +64,14 @@
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="이메일 입니다" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Sa0-Ae-hQk">
-                                                            <rect key="frame" x="106" y="79" width="260" height="21"/>
+                                                            <rect key="frame" x="125" y="82" width="207" height="21"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                                             <nil key="textColor"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
-                                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VIV-RE-u6Y">
-                                                            <rect key="frame" x="8" y="15" width="90" height="90"/>
-                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                        </imageView>
                                                         <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wGc-6M-NaD">
-                                                            <rect key="frame" x="106" y="16" width="99" height="27"/>
+                                                            <rect key="frame" x="125" y="18" width="99" height="27"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                             <subviews>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="🛴 이용중" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fX6-c7-nIr">
@@ -62,24 +85,16 @@
                                                             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                         </view>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="닉네임 입니다" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="r1B-9Q-JgH">
-                                                            <rect key="frame" x="106" y="51" width="260" height="21"/>
+                                                            <rect key="frame" x="125" y="53" width="207" height="21"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                                             <nil key="textColor"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
-                                                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3Xp-G7-tH3">
-                                                            <rect key="frame" x="233" y="15" width="101" height="28"/>
+                                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VIV-RE-u6Y">
+                                                            <rect key="frame" x="21" y="21" width="78" height="78"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                            <state key="normal" title="Button"/>
-                                                            <buttonConfiguration key="configuration" style="filled" imagePlacement="trailing" title="로그아웃  " cornerStyle="capsule">
-                                                                <imageReference key="image" image="rectangle.portrait.and.arrow.right" catalog="system" symbolScale="small"/>
-                                                                <fontDescription key="titleFontDescription" type="system" pointSize="0.0"/>
-                                                            </buttonConfiguration>
-                                                            <connections>
-                                                                <action selector="logout:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="fCm-BV-hm2"/>
-                                                            </connections>
-                                                        </button>
+                                                        </imageView>
                                                     </subviews>
                                                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                 </view>
@@ -99,7 +114,7 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="collectionCell" rowHeight="100" id="tlk-y3-bRN" customClass="CollectionTableViewCell" customModule="bilboard" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="170" width="393" height="100"/>
+                                        <rect key="frame" x="0.0" y="241" width="393" height="100"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="tlk-y3-bRN" id="XJ8-Zn-v0g">
                                             <rect key="frame" x="0.0" y="0.0" width="393" height="100"/>
@@ -171,7 +186,7 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="historyCell" rowHeight="110" id="5Z8-h1-0LQ" customClass="HistoryTableViewCell" customModule="bilboard" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="270" width="393" height="110"/>
+                                        <rect key="frame" x="0.0" y="341" width="393" height="110"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="5Z8-h1-0LQ" id="5Sf-Oj-XRf">
                                             <rect key="frame" x="0.0" y="0.0" width="393" height="110"/>
@@ -252,7 +267,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2445" y="-45"/>
+            <point key="canvasLocation" x="-2445.0381679389311" y="-45.070422535211272"/>
         </scene>
         <!--Board View Controller-->
         <scene sceneID="0qq-Qg-fQP">
@@ -380,6 +395,9 @@
     <resources>
         <image name="person" catalog="system" width="128" height="121"/>
         <image name="rectangle.portrait.and.arrow.right" catalog="system" width="128" height="109"/>
+        <namedColor name="MainColor">
+            <color red="0.59215686274509804" green="0.27843137254901962" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
         <namedColor name="MildPurple">
             <color red="0.92156862745098034" green="0.86274509803921573" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

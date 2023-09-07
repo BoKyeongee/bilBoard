@@ -25,7 +25,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     // 각 section 당 cell 개수 반환
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
-        case 2: return profile.usageHistory?.count ?? 0
+        case 2: return profile.usageHistory?.count ?? 1
             default: return 1
         }
     }
@@ -65,14 +65,37 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
             
             return profileCell
         case 1:
-            guard let collectionCell = tableView.dequeueReusableCell(withIdentifier: "collectionCell") as? CollectionTableViewCell else {return UITableViewCell()}
+            
+            guard profile.bilBoardInfos != nil else {
+                
+                let emptyCell = UITableViewCell()
+                let emptyLabel = UILabel(frame: CGRect(x: 100, y: 20, width: 300, height: 20))
+                
+                emptyCell.addSubview(emptyLabel)
+                emptyLabel.text = "등록된 BilBoard가 없습니다"
+                
+                return emptyCell
+            }
+            let collectionCell = tableView.dequeueReusableCell(withIdentifier: "collectionCell") as! CollectionTableViewCell
             
             collectionCell.selectionStyle = .none
             collectionCell.collectionView.reloadData()
             
             return collectionCell
         case 2:
-            guard let historyCell = tableView.dequeueReusableCell(withIdentifier: "historyCell") as? HistoryTableViewCell else {return UITableViewCell()}
+            guard profile.usageHistory != nil else {
+                
+                let emptyCell = UITableViewCell()
+                let emptyLabel = UILabel(frame: CGRect(x: 130, y: 5, width: 300, height: 50))
+                
+                emptyCell.addSubview(emptyLabel)
+                emptyLabel.text = "이용 내역이 없습니다"
+                
+                return emptyCell
+            }
+            
+            let historyCell = tableView.dequeueReusableCell(withIdentifier: "historyCell") as! HistoryTableViewCell
+            
             historyCell.setData(profile.usageHistory![indexPath.row])
             
             historyCell.selectionStyle = .none

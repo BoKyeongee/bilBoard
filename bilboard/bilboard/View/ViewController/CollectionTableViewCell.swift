@@ -9,6 +9,7 @@ import UIKit
 
 class CollectionTableViewCell: UITableViewCell, UICollectionViewDelegate, UICollectionViewDataSource {
 
+    @IBOutlet weak var emptyLabel: UILabel!
     @IBOutlet weak var collectionView: UICollectionView!
     
     override func awakeFromNib() {
@@ -39,17 +40,16 @@ class CollectionTableViewCell: UITableViewCell, UICollectionViewDelegate, UIColl
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {20}
     
-    
     // collectionViewCell 개수
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         collectionView.reloadData()
-        print("CollectionTableViewCell: numberOfItemsInSections are \(profile.bilBoardInfos!.count)")
-        return profile.bilBoardInfos?.count ?? 0
+        return profile.bilBoardInfos?.count ?? 1
     }
     
     // collectionViewCell 반환
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let boardCell = collectionView.dequeueReusableCell(withReuseIdentifier: "boardCell", for: indexPath) as? CollectionViewCell else {return UICollectionViewCell()}
+        
+        let boardCell = collectionView.dequeueReusableCell(withReuseIdentifier: "collectionCell", for: indexPath) as! CollectionViewCell
         boardCell.setNeedsDisplay()
         
         boardCell.setData(profile.bilBoardInfos![indexPath.item])

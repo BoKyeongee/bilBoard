@@ -11,19 +11,27 @@ import NMapsGeometry
 
 class BoardViewController: UIViewController {
 
+    @IBOutlet weak var mapbox: NMFMapView!
     @IBOutlet weak var detailAddress: UILabel!
     @IBOutlet weak var registerDate: UILabel!
     @IBOutlet weak var address1: UILabel!
     @IBOutlet weak var infoBox: UIView!
-    @IBOutlet var mapView: UIView!
     @IBOutlet weak var typeLabel: UILabel!
     @IBOutlet weak var typeBox: UIView!
     @IBOutlet weak var idLabel: UILabel!
     @IBOutlet weak var topbar: UIView!
     
-    func drawMap() -> UIView {
-        mapView = NMFMapView(frame: view.frame)
-        return mapView
+    func loadMap() {
+        let mapView = NMFMapView(frame: mapbox.frame)
+        
+        view.addSubview(mapbox)
+        
+        let marker = NMFMarker(position: NMGLatLng(lat: 37.5670135, lng: 126.9783740))
+        marker.iconImage = NMF_MARKER_IMAGE_BLACK
+        marker.iconTintColor = UIColor.red
+        
+        let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: 37.5670135, lng: 126.9783740))
+        mapView.moveCamera(cameraUpdate)
     }
     
     func loadData() {
@@ -43,18 +51,17 @@ class BoardViewController: UIViewController {
         typeBox.backgroundColor = UIColor(named: "MildPurple")
         typeBox.layer.cornerRadius = 14
         
-        mapView.layer.cornerRadius = 20
+        mapbox.layer.cornerRadius = 20
         
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        loadData()
+        loadMap()
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.addSubview(mapView)
-        loadData()
-        drawMap()
-        
-        // Do any additional setup after loading the view.
     }
     
 

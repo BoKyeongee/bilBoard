@@ -291,12 +291,12 @@ class AppBoardViewController: UIViewController, UIPickerViewDelegate, UIPickerVi
                         DispatchQueue.main.async{ [weak self] in
                             guard let self = self else {return }
                             if tfType.text == "basic" {
-                                profile.bilBoardInfos!.append(BoardInfo(address: tfAddress.text!, boardType:.basic , boardID: 1005, registerTime: "2023-09-05 10:45:00", lat : latitude, lng : longitude))
-                            } else {
-                                profile.bilBoardInfos!.append(BoardInfo(address: tfAddress.text!, boardType:.premium , boardID: 1005, registerTime: "2023-09-05 10:45:00", lat : latitude, lng : longitude))
-                            }
-                            print(profile.bilBoardInfos)
-                        }
+                                            profile.bilBoardInfos!.append(BoardInfo(address: tfAddress.text!, boardType:.basic , boardID: (profile.bilBoardInfos?.last!.boardID)! + 1, registerTime: Date().GetCurrentTime(), lat : latitude, lng : longitude))
+                                          } else if tfType.text == "premium" {
+                                            profile.bilBoardInfos!.append(BoardInfo(address: tfAddress.text!, boardType:.premium , boardID: (profile.bilBoardInfos?.last!.boardID)! + 1, registerTime: Date().GetCurrentTime(), lat : latitude, lng : longitude))
+                                          }
+                                          print(profile.bilBoardInfos)
+                                        }
                         
                         print(latitude)
                         print(longitude)

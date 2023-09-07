@@ -15,9 +15,10 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var signInButton: UIButton!
     
     
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // 메인 사진
+                // 메인 사진
         brandImage.image = UIImage(named: "BilBoard")
         
         //비밀번호 *로 표시

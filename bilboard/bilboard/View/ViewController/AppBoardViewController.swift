@@ -17,7 +17,7 @@ class AppBoardViewController: UIViewController, UIPickerViewDelegate, UIPickerVi
     
     let ACTIVITY_NAME = "A_Picker"
     
-    let arr = ["서울 자곡로 102" , "대구 안심로 261 ", "제주시 오등동 1100로", "부천시 중동로 22번길 64"] // [피커 뷰에 표시될 리스트]
+    let arr = ["서울 자곡로 102" , "대구 안심로 261 ", "제주시 오등동 1100로", "부천시 중동로 22번길 64", "부천시 소사구 소사본동", "대전 서구 도마동", "대구 중구 봉산동", "대구 달서구 상인동", "대구 수성구 범어동", "제주도 서귀포"] // [피커 뷰에 표시될 리스트]
     let arr2 = ["basic", "premium"]
     
     
@@ -290,14 +290,25 @@ class AppBoardViewController: UIViewController, UIPickerViewDelegate, UIPickerVi
                         longitude = Double(firstAddress.longitude)!
                         DispatchQueue.main.async{ [weak self] in
                             guard let self = self else {return }
-                            if tfType.text == "basic" {
-                                            profile.bilBoardInfos!.append(BoardInfo(address: tfAddress.text!, boardType:.basic , boardID: (profile.bilBoardInfos?.last!.boardID)! + 1, registerTime: Date().GetCurrentTime(), lat : latitude, lng : longitude))
-                                          } else if tfType.text == "premium" {
-                                            profile.bilBoardInfos!.append(BoardInfo(address: tfAddress.text!, boardType:.premium , boardID: (profile.bilBoardInfos?.last!.boardID)! + 1, registerTime: Date().GetCurrentTime(), lat : latitude, lng : longitude))
-                                          }
-                                          print(profile.bilBoardInfos)
+                            
+                            var bilBoardInfos = profile.bilBoardInfos ?? []
+                            let lastBoardID = bilBoardInfos.last?.boardID ?? 1004
+                            let newBoardID = lastBoardID + 1
+
+                            if let tfTypeText = tfType.text {
+                                if tfTypeText == "basic" {
+                                    bilBoardInfos.append(BoardInfo(address: tfAddress.text!, boardType: .basic, boardID: newBoardID, registerTime: Date().GetCurrentTime(), lat: latitude, lng: longitude))
+                                } else if tfTypeText == "premium" {
+                                    bilBoardInfos.append(BoardInfo(address: tfAddress.text!, boardType: .premium, boardID: newBoardID, registerTime: Date().GetCurrentTime(), lat: latitude, lng: longitude))
+                                    
+                                }
+                                showAlert(title: "우리들의 성공", message: "을 위하여")
+                            }
+
+                            profile.bilBoardInfos = bilBoardInfos
+
                                         }
-                        
+                        print(profile.bilBoardInfos)
                         print(latitude)
                         print(longitude)
                         // 주소를 찾아 위도와 경도를 얻어왔지만, 지도 이동 부분을 비활성화

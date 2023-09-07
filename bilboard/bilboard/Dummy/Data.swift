@@ -39,7 +39,7 @@ var profile = UserInfo(
     isLogin: false,
     profileImageUrl: nil,
     usageHistory: [history1,history2],
-    bilBoardInfos: [boardInfo1,boardInfo2,boardInfo3,boardInfo4],
+    bilBoardInfos: nil,
     currentLat: 37.481776875776,
     currentLng: 126.79742178525
 )

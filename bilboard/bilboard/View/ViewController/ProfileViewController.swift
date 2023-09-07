@@ -96,7 +96,26 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
 
 
     @IBOutlet weak var tableView: UITableView!
-
+    
+    @IBAction func logout(_ sender: Any) {
+        let popup = UIAlertController(title: "로그아웃", message: "정말 로그아웃 하시겠습니까?", preferredStyle: .alert)
+        let cancel = UIAlertAction(title: "취소", style: .cancel)
+        let logout = UIAlertAction(title: "확인", style: .default) { [self] (_) in
+            
+            // 클릭 시 처리할 내용
+            profile.isLogin = false
+            let loginViewControllerID = UIStoryboard(name: "SignInPage", bundle: .none).instantiateViewController(identifier: "loginViewControllerID") as! LoginViewController
+            navigationController?.pushViewController(loginViewControllerID, animated: true)
+        }
+        popup.addAction(cancel)
+        popup.addAction(logout)
+        self.present(popup, animated: true)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        var historyData = profile.usageHistory
+        tableView.reloadData()
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         

@@ -43,10 +43,10 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         guard let username = logInIdTextField.text, let password = logInPwTextField.text else {
             return
         }
-        
         //model 파일과 비교
-        for user in registeredUsers {
-            if user.username == username && user.password == password {
+        
+        for userInfo in registeredUsers {
+            if profile.userId == username && profile.userPw == password {
                 performSegue(withIdentifier: "MapPageViewController", sender: self)
                 return
             }
@@ -62,7 +62,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         }
         
         //로그인 실패 메세지
-        let alert = UIAlertController(title: "오휴", message: "아이디 또는 비밀번호를 다시 확인해주세요.", preferredStyle: .alert)
+        let alert = UIAlertController(title: "오류", message: "아이디 또는 비밀번호를 다시 확인해주세요.", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "확인", style: .default))
         present(alert, animated: true)
     }

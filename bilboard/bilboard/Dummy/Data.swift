@@ -32,8 +32,8 @@ let boardInfo4 = BoardInfo(address: "부산시 해운대구", boardType: BoardTy
 
 var profile = UserInfo(
     nickname: "노스크럼",
-    userId: "importantMorning",
-    userPw: "Shtmzmfja7&",
+    userId: "bilboard1",
+    userPw: "Bilboard1!",
     email: "example@email.com",
     isUsing: false,
     isLogin: false,
@@ -43,3 +43,8 @@ var profile = UserInfo(
     currentLat: 37.481776875776,
     currentLng: 126.79742178525
 )
+
+var registeredUsers: [UserInfo] = [profile]
+
+
+

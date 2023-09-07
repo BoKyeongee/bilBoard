@@ -9,7 +9,8 @@ import UIKit
 
 class CollectionTableViewCell: UITableViewCell, UICollectionViewDelegate, UICollectionViewDataSource {
     
-    var boardInfo = [boardInfo1, boardInfo2, boardInfo3, boardInfo4]
+    var boardInfoData = profile.bilBoardInfos
+    var boardInfoDummy = [boardInfo1, boardInfo2, boardInfo3, boardInfo4]
 
     @IBOutlet weak var collectionView: UICollectionView!
     
@@ -44,14 +45,14 @@ class CollectionTableViewCell: UITableViewCell, UICollectionViewDelegate, UIColl
     
     // collectionViewCell 개수
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return boardInfo.count
+        return boardInfoData?.count ?? 0
     }
     
     // collectionViewCell 반환
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let boardCell = collectionView.dequeueReusableCell(withReuseIdentifier: "boardCell", for: indexPath) as? CollectionViewCell else {return UICollectionViewCell()}
         
-        boardCell.setData(boardInfo[indexPath.item])
+        boardCell.setData(boardInfoData?[indexPath.item] ?? boardInfoDummy[indexPath.item])
         boardCell.idLabel.textColor = .white
         boardCell.addressLabel.textColor = .white
         boardCell.typeWrap.backgroundColor = UIColor(named: "MildPurple")

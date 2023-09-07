@@ -26,12 +26,10 @@ class BoardViewController: UIViewController {
         
         view.addSubview(mapbox)
         
-        let marker = NMFMarker(position: NMGLatLng(lat: 37.5670135, lng: 126.9783740))
+        let marker = NMFMarker()
+        marker.position = NMGLatLng(lat: 37.5670135, lng: 126.9783740)
         marker.iconImage = NMF_MARKER_IMAGE_BLACK
         marker.iconTintColor = UIColor.red
-        
-        let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: 37.5670135, lng: 126.9783740))
-        mapView.moveCamera(cameraUpdate)
     }
     
     func loadData() {

@@ -1,17 +1,16 @@
 {
   "images" : [
     {
-      "filename" : "BilBoard.png",
+      "filename" : "Red Modern Map Pin Travel Logo (400 x 500 px) (1).png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "BilBoard 1.png",
+      "filename" : "Red Modern Map Pin Travel Logo (400 x 500 px).png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "BilBoard 1 2.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

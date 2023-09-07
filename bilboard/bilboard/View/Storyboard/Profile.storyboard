@@ -76,6 +76,9 @@
                                                                 <imageReference key="image" image="rectangle.portrait.and.arrow.right" catalog="system" symbolScale="small"/>
                                                                 <fontDescription key="titleFontDescription" type="system" pointSize="0.0"/>
                                                             </buttonConfiguration>
+                                                            <connections>
+                                                                <action selector="logout:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="fCm-BV-hm2"/>
+                                                            </connections>
                                                         </button>
                                                     </subviews>
                                                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -249,7 +252,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2118.320610687023" y="-54.225352112676056"/>
+            <point key="canvasLocation" x="-2445" y="-45"/>
         </scene>
         <!--Board View Controller-->
         <scene sceneID="0qq-Qg-fQP">
@@ -286,11 +289,6 @@
                                     </view>
                                 </subviews>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                            </view>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aMC-gZ-CTe">
-                                <rect key="frame" x="16" y="113" width="361" height="441"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" name="MildPurple"/>
                             </view>
                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SK1-K4-aF5">
                                 <rect key="frame" x="0.0" y="562" width="393" height="211"/>
@@ -334,6 +332,11 @@
                                 </subviews>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             </view>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="QR2-dx-IxG" customClass="NMFMapView">
+                                <rect key="frame" x="16" y="113" width="361" height="455"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" name="MildPurple"/>
+                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Rto-er-abQ"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -343,7 +346,7 @@
                         <outlet property="detailAddress" destination="SoY-5F-EUV" id="zbC-Ro-893"/>
                         <outlet property="idLabel" destination="gk6-hk-Kav" id="rXE-J9-Ou2"/>
                         <outlet property="infoBox" destination="SK1-K4-aF5" id="mqo-2I-U8K"/>
-                        <outlet property="mapView" destination="aMC-gZ-CTe" id="fHs-Eh-xRX"/>
+                        <outlet property="mapbox" destination="QR2-dx-IxG" id="VVG-pz-Fy1"/>
                         <outlet property="registerDate" destination="8ou-7w-h4I" id="vcs-e1-Yl1"/>
                         <outlet property="topbar" destination="lHz-Yz-M04" id="8V8-mj-FJZ"/>
                         <outlet property="typeBox" destination="ZiF-vu-S2r" id="hvg-PH-WPP"/>
@@ -352,7 +355,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="oga-wI-dWb" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1236" y="-54"/>
+            <point key="canvasLocation" x="-1637.4045801526718" y="-40.140845070422536"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="1ve-br-us6">

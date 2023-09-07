@@ -55,6 +55,21 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         return nil
     }
     
+    func getIDInfo() -> UserInfo? {
+        if let userData = UserDefaults.standard.dictionary(forKey: "userData") {
+            if let nickName = userData["nickName"] as? String,
+               let id = userData["id"] as? String,
+               let password = userData["password"] as? String,
+               let email = userData["email"] as? String,
+               let currentLat = userData["currentLat"] as? Double,
+               let currentLng = userData["currentLng"] as? Double {
+              let userInfo =    UserInfo(nickname: nickName, userId: id, userPw: password, email: email, isUsing: false, isLogin: false, usageHistory: nil, bilBoardInfos: nil, currentLat: currentLat, currentLng: currentLng, profileImgName: nil)
+                return userInfo
+            }
+        }
+        return nil
+    }
+    
     @IBAction func didTapLoginButton(_ sender: UIButton) {
         
         guard let username = logInIdTextField.text, let password = logInPwTextField.text else {

@@ -284,7 +284,9 @@ class MapPageViewController: UIViewController, NMFMapViewTouchDelegate {
         if profile.usageHistory == nil{
             userHistory = History(historyID: 1, startTime: Date().GetCurrentTime(), endTime: Date().GetCurrentTime(), startLat: 0, startLong: 0, endLat: 0, endLong: 0, useDate: Date().GetCurrentTime(), bilBoardID: 100)
             
-        }else{
+        }
+        
+        else{
             let historyLength = profile.usageHistory!.count
             let history = profile.usageHistory![historyLength - 1]
             userHistory = History(historyID: history.historyID + 1, startTime: Date().GetCurrentTime(), endTime: Date().GetCurrentTime(), startLat: 0, startLong: 0, endLat: 0, endLong : 0, useDate: Date().GetCurrentTime(), bilBoardID: history.bilBoardID + 1)

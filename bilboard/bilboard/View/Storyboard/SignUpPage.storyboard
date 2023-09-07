@@ -131,6 +131,9 @@
                                         <buttonConfiguration key="configuration" style="filled" title="확인">
                                             <color key="baseBackgroundColor" red="0.56469356459999998" green="0.29835147709999998" blue="1" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                         </buttonConfiguration>
+                                        <connections>
+                                            <action selector="verifyButtonPressed:" destination="GWk-Qt-NnC" eventType="touchUpInside" id="z5a-7l-cOm"/>
+                                        </connections>
                                     </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="por-Ak-Tnh">
                                         <rect key="frame" x="263" y="0.0" width="35.333333333333314" height="34.333333333333336"/>
@@ -298,6 +301,7 @@
                         <outlet property="nickNameValidationText" destination="q5T-Cp-KGp" id="qX8-hX-Q44"/>
                         <outlet property="pwTextField" destination="B9C-EJ-lhS" id="2GC-NX-Rdk"/>
                         <outlet property="pwValidationText" destination="8Ft-sc-vE3" id="cHf-Gx-2g1"/>
+                        <outlet property="verificationButton" destination="MD5-8t-AVK" id="nWe-SK-RJG"/>
                         <outletCollection property="defaultHiddenCollection" destination="q5T-Cp-KGp" collectionClass="NSMutableArray" id="wmp-wZ-5Fz"/>
                         <outletCollection property="defaultHiddenCollection" destination="z5w-Qy-TRk" collectionClass="NSMutableArray" id="bds-KR-w1X"/>
                         <outletCollection property="defaultHiddenCollection" destination="8Ft-sc-vE3" collectionClass="NSMutableArray" id="UMq-fi-rZR"/>

@@ -60,7 +60,7 @@
                                 </buttonConfiguration>
                                 <connections>
                                     <action selector="didTapLoginButton:" destination="xDS-oC-iOA" eventType="touchUpInside" id="A6P-n7-uIa"/>
-                                    <segue destination="x08-3A-mOO" kind="show" identifier="MapPageViewController" id="XxM-X3-zxn"/>
+                                    <segue destination="x08-3A-mOO" kind="presentation" identifier="MapPageViewController" modalPresentationStyle="fullScreen" modalTransitionStyle="crossDissolve" id="XxM-X3-zxn"/>
                                 </connections>
                             </button>
                         </subviews>

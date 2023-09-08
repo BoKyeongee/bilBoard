@@ -38,7 +38,10 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         self.view.addGestureRecognizer(tapGesture)
         
-        
+        if UserDefaults.standard.bool(forKey: "isLogin") {
+            performSegue(withIdentifier: "MapPageViewController", sender: self)
+        }
+
     }
     
     func getIDInfo() -> UserInfo? {
@@ -72,6 +75,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         
         for userInfo in registeredUsers {
             if userInfo.userId == username && userInfo.userPw == password {
+                UserDefaults.standard.set(true, forKey: "isLogin")
                 profile = userInfo
                 performSegue(withIdentifier: "MapPageViewController", sender: self)
                 return
@@ -82,11 +86,11 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         if let savedUsername = UserDefaults.standard.string(forKey: "id"),
            let savedPassword = UserDefaults.standard.string(forKey: "password"),
            savedUsername == username && savedPassword == password {
+            UserDefaults.standard.set(true, forKey: "isLogin")
             print("로그인 되었습니다.")
-            performSegue(withIdentifier: "MapPageViewController", sender: self)
+            //performSegue(withIdentifier: "MapPageViewController", sender: self)
             return
         }
-        
         
         //로그인 실패 메세지.
         let alert = UIAlertController(title: "오류", message: "아이디 또는 비밀번호를 다시 확인해주세요.", preferredStyle: .alert)
@@ -138,5 +142,4 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         textField.resignFirstResponder()
         return true
     }
-    
 }

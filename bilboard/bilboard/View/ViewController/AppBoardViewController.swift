@@ -10,7 +10,7 @@ import SnapKit
 class AppBoardViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
  let Btn = UIColor(named: "Main")
  let ACTIVITY_NAME = "A_Picker"
- let arr = ["서울 자곡로 102" , "대구 안심로 261 ", "제주시 오등동 1100로", "부천시 중동로 22번길 64"] // [피커 뷰에 표시될 리스트]
+ let arr = ["서울 자곡로 102" , "대구 안심로 261 ", "제주시 오등동 1100로", "부천시 중동로 22번길 64", "대구 동성로", "부산 해운대구", "대구 달서구", "진주 평거동"] // [피커 뷰에 표시될 리스트]
  let arr2 = ["basic", "premium"]
  var choiceItem = "" { // [변수 값이 변경 되면 동시에 텍스트 필드 값 UI 업데이트 실시]
   didSet {

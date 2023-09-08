@@ -23,6 +23,9 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         //비밀번호 *로 표시
         logInPwTextField.isSecureTextEntry = true
         
+        //비밀번호 강력한 암호 설정 비활성화
+        logInPwTextField.passwordRules = nil
+        
         //키보드 done 버튼 생성
         logInIdTextField.returnKeyType = .done
         logInPwTextField.returnKeyType = .done
@@ -38,33 +41,62 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         
     }
     
+    func getIDInfo() -> UserInfo? {
+        if let userData = UserDefaults.standard.dictionary(forKey: "userData") {
+            if let nickName = userData["nickName"] as? String,
+               let id = userData["id"] as? String,
+               let password = userData["password"] as? String,
+               let email = userData["email"] as? String,
+               let currentLat = userData["currentLat"] as? Double,
+               let currentLng = userData["currentLng"] as? Double {
+              let userInfo =    UserInfo(nickname: nickName, userId: id, userPw: password, email: email, isUsing: false, isLogin: false, usageHistory: nil, bilBoardInfos: nil, currentLat: currentLat, currentLng: currentLng, profileImgName: nil)
+                return userInfo
+            }
+        }
+        return nil
+    }
+    
     @IBAction func didTapLoginButton(_ sender: UIButton) {
         
         guard let username = logInIdTextField.text, let password = logInPwTextField.text else {
             return
         }
-        
         //model 파일과 비교
-        for user in registeredUsers {
-            if user.username == username && user.password == password {
+        let user = getIDInfo()
+        if let user = user{
+            registeredUsers.append(user)
+        }else{
+            print("회원가입 안됨")
+        }
+        
+        
+        for userInfo in registeredUsers {
+            if userInfo.userId == username && userInfo.userPw == password {
+                profile = userInfo
                 performSegue(withIdentifier: "MapPageViewController", sender: self)
                 return
             }
         }
         
         // 유저디폴트와 비교
-        if let savedUsername = UserDefaults.standard.string(forKey: "savedUsername"),
-           let savedPassword = UserDefaults.standard.string(forKey: "savedPassword"),
+        if let savedUsername = UserDefaults.standard.string(forKey: "id"),
+           let savedPassword = UserDefaults.standard.string(forKey: "password"),
            savedUsername == username && savedPassword == password {
             print("로그인 되었습니다.")
             performSegue(withIdentifier: "MapPageViewController", sender: self)
             return
         }
         
-        //로그인 실패 메세지
-        let alert = UIAlertController(title: "오휴", message: "아이디 또는 비밀번호를 다시 확인해주세요.", preferredStyle: .alert)
+        
+        //로그인 실패 메세지.
+        let alert = UIAlertController(title: "오류", message: "아이디 또는 비밀번호를 다시 확인해주세요.", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "확인", style: .default))
         present(alert, animated: true)
+    }
+    
+    //로그인 상태 확인
+    func checkLoginStatus() -> Bool {
+        return UserDefaults.standard.bool(forKey: "isLogin")
     }
     
     //키보드 설정
@@ -99,6 +131,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     @objc func dismissKeyboard() {
         self.view.endEditing(true)
     }
+    
     
     //done 버튼 누르면 키보드 숨기기
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {

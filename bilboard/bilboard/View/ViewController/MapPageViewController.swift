@@ -112,7 +112,7 @@ class MapPageViewController: UIViewController, NMFMapViewTouchDelegate {
         stackView.spacing = 10
         
         let buttonWidth: CGFloat = 100
-        let buttonHeight: CGFloat = 70
+        let buttonHeight: CGFloat = 60
         
         let searchPathButton = UIButton()
         if let customColor = UIColor(named: "MainColor") {
@@ -136,7 +136,7 @@ class MapPageViewController: UIViewController, NMFMapViewTouchDelegate {
         stackView.snp.makeConstraints {
             $0.top.equalTo(goalLabel.snp.top)
             $0.leading.equalTo(goalLabel.snp.trailing).offset(10)
-            $0.trailing.equalToSuperview().offset(-5)
+            $0.trailing.equalToSuperview().offset(-20)
             $0.height.equalTo(buttonHeight)
             $0.width.equalTo(buttonWidth)
         }
@@ -214,14 +214,14 @@ class MapPageViewController: UIViewController, NMFMapViewTouchDelegate {
         view.addSubview(usingTimeLabel)
         
         usingTimeLabel.snp.makeConstraints {
-            $0.trailing.equalToSuperview().offset(-20)
+            $0.trailing.equalTo(view.snp.trailing).offset(10)
             $0.top.equalToSuperview().offset(20)
-            $0.width.equalToSuperview().multipliedBy(0.3)
+            $0.width.equalToSuperview().multipliedBy(0.4)
             $0.height.equalTo(20)
         }
         
         let rideOrReturnButton = UIButton()
-        rideOrReturnButton.backgroundColor = .lightGray
+        rideOrReturnButton.backgroundColor = .red
         rideOrReturnButton.layer.cornerRadius = 10
         rideOrReturnButton.addTarget(self, action: #selector(onRideOrReturnButtonTapped), for: .touchUpInside)
         
@@ -232,13 +232,17 @@ class MapPageViewController: UIViewController, NMFMapViewTouchDelegate {
         }
         rideOrReturnButton.setTitle("탑승하기", for: .normal)
         rideOrReturnButton.isEnabled = false
-        rideOrReturnButton.setTitleColor(.gray, for: .disabled)
         
+        let disabledColor = UIColor(named: "MildPurple")
+
+        
+        rideOrReturnButton.setTitleColor(.gray, for: .disabled)
+        rideOrReturnButton.backgroundColor = disabledColor
         view.addSubview(rideOrReturnButton)
         rideOrReturnButton.snp.makeConstraints {
             $0.centerX.equalToSuperview()
-            $0.bottom.equalTo(view.snp.bottom).offset(-10)
-            $0.height.equalToSuperview().multipliedBy(0.3)
+            $0.bottom.equalTo(view.snp.bottom).offset(-22)
+            $0.height.equalToSuperview().multipliedBy(0.4)
             $0.width.equalToSuperview().multipliedBy(0.3)
         }
         
@@ -259,6 +263,7 @@ class MapPageViewController: UIViewController, NMFMapViewTouchDelegate {
     var touchedMarker : NMFMarker?
     var goal = NMGLatLng(lat: 37.5023270, lng: 127.0444447) //경로 추적시 팀 스파르타 위도 경도 하드코딩
     var pathLatLng: [NMGLatLng] = []
+    var additionalMarker : [NMFMarker] = []
     var pathOverlay = NMFPath()
     var bMovePathSimulationStart = false
     var currentIndex = 1
@@ -283,7 +288,6 @@ class MapPageViewController: UIViewController, NMFMapViewTouchDelegate {
     {
         if profile.usageHistory == nil{
             userHistory = History(historyID: 1, startTime: Date().GetCurrentTime(), endTime: Date().GetCurrentTime(), startLat: 0, startLong: 0, endLat: 0, endLong: 0, useDate: Date().GetCurrentTime(), bilBoardID: 100)
-            
         }
         
         else{
@@ -334,15 +338,21 @@ class MapPageViewController: UIViewController, NMFMapViewTouchDelegate {
         let circleView = bottomView.subviews[0] as UIView
         let statusLabel = bottomView.subviews[1] as? UILabel
         let rideOrReturnButton = bottomView.subviews[3] as? UIButton
-        
+
         if profile.isUsing == false{
             circleView.backgroundColor = .red
             statusLabel?.text = "탑승중 아님"
+            let customColor = UIColor(named: "MildPurple")
+            rideOrReturnButton?.backgroundColor = customColor
+            rideOrReturnButton?.setTitleColor(.white, for: .normal)
             rideOrReturnButton?.setTitle("탑승하기", for: .normal)
         }
         else{
             circleView.backgroundColor = .green
+            let customColor = UIColor(named: "MildPurple")
             statusLabel?.text = "탑승중"
+            rideOrReturnButton?.backgroundColor = customColor
+            rideOrReturnButton?.setTitleColor(.white, for: .normal)
             rideOrReturnButton?.setTitle("반납하기", for: .normal)
         }
     }
@@ -379,17 +389,24 @@ class MapPageViewController: UIViewController, NMFMapViewTouchDelegate {
             rideOrReturnEnabled(enabled: true)
             returnLocationCoordinate = NMGLatLng(lat: latlng.lat, lng: latlng.lng)
             updateBomttomUI()
+            let rideOrReturnButton = bottomView.subviews[3] as? UIButton
+            let customColor = UIColor(named: "MainColor")
+            rideOrReturnButton?.backgroundColor = customColor
+            rideOrReturnButton?.setTitleColor(.white, for: .normal)
         } else {
             let closestMarker = findClosestMarker(to: latlng)
             if let marker = closestMarker {
                 isMarkerTouched = true
                 rideOrReturnEnabled(enabled: true)
                 touchedMarker = marker
-                print(touchedMarker)
+                let rideOrReturnButton = bottomView.subviews[3] as? UIButton
+                let customColor = UIColor(named: "MainColor")
+                rideOrReturnButton?.backgroundColor = customColor
+                rideOrReturnButton?.setTitleColor(.white, for: .normal)
             } else {
                 print("인접한 마커가 없습니다.")
             }
-            updateBomttomUI()
+            //updateBomttomUI()
         }
     }
     @objc func onRideOrReturnButtonTapped(){
@@ -399,6 +416,14 @@ class MapPageViewController: UIViewController, NMFMapViewTouchDelegate {
         pathMoveTimer?.invalidate()
         pathMoveTimer = nil
         if isMarkerTouched {
+            
+            for additionalmarker in additionalMarker{
+                let findMarker = findClosestAdditionalMarker(to: NMGLatLng(lat: touchedMarker!.position.lat, lng: touchedMarker!.position.lng))
+                if findMarker != nil{
+                    findMarker!.mapView = nil
+                }
+            }
+            
             handleMarkerTouched()
             startTimer()
             goalView.isHidden = false//추가
@@ -427,6 +452,16 @@ class MapPageViewController: UIViewController, NMFMapViewTouchDelegate {
             profile.usageHistory?.append(userHistory!)
             print("count -> \(profile.usageHistory?.count)")
             
+            
+            let marker = NMFMarker()
+            marker.iconTintColor = UIColor.blue
+            marker.position = NMGLatLng(lat: currentMarker!.position.lat + 0.000000002, lng: currentMarker!.position.lng + 0.000000002)
+            marker.captionColor = UIColor.blue
+            marker.captionHaloColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1)
+            marker.captionText = "퀵보드 대여 가능"
+            marker.captionTextSize = 20
+            marker.mapView = mapView
+            additionalMarker.append(marker)
         }
     }
     func startTimer(){
@@ -446,9 +481,9 @@ class MapPageViewController: UIViewController, NMFMapViewTouchDelegate {
         let timerLabel = bottomView.subviews[2] as? UILabel
         if let timerLabel = timerLabel{
             if timerSeconds < 60{
-                timerLabel.text = "\(timerSeconds)초"
+                timerLabel.text = "이용시간 : \(timerSeconds)초"
             }else{
-                timerLabel.text = "\(timerSeconds / 60)분 \(timerSeconds % 60)초"
+                timerLabel.text = "이용시간 : \(timerSeconds / 60)분 \(timerSeconds % 60)초"
             }
         }
     }
@@ -497,6 +532,7 @@ class MapPageViewController: UIViewController, NMFMapViewTouchDelegate {
     }
     
     func handleMarkerTouched() {
+
         guard let touchedMarker = touchedMarker else {
             return
         }
@@ -504,9 +540,18 @@ class MapPageViewController: UIViewController, NMFMapViewTouchDelegate {
         
         profile.isUsing = true
         isMarkerTouched = false
-        
+
         if let index = markerList.firstIndex(of: touchedMarker) {
+            
             markerList.remove(at: index)
+            let boardList = profile.bilBoardInfos
+            for idx in 0..<boardList!.count{
+                if touchedMarker.position.lat == boardList?[idx].lat{
+                    profile.bilBoardInfos?.remove(at: idx)
+                    
+                }
+            }
+
             print("마커 삭제 완료")
         }
         
@@ -524,7 +569,6 @@ class MapPageViewController: UIViewController, NMFMapViewTouchDelegate {
             return
         }
         createMarker(at: coordinate)
-        
         mapView.setNeedsDisplay()
         mapView.moveCamera(NMFCameraUpdate(scrollTo: NMGLatLng(lat: coordinate.lat, lng: coordinate.lng)))
         
@@ -540,13 +584,19 @@ class MapPageViewController: UIViewController, NMFMapViewTouchDelegate {
     
     func rideOrReturnEnabled(enabled : Bool)
     {
+
+        
         let rideOrReturnButton = bottomView.subviews[3] as? UIButton
         if enabled{
+            let customColor = UIColor(named: "MainColor")
+            rideOrReturnButton?.backgroundColor = customColor
+            rideOrReturnButton?.setTitleColor(.white, for: .normal)
             rideOrReturnButton?.isEnabled = enabled
-            rideOrReturnButton?.setTitleColor(.black, for: .normal)
         }else{
-            rideOrReturnButton?.isEnabled = enabled
+            let customColor = UIColor(named: "MildPurple")
+            rideOrReturnButton?.backgroundColor = customColor
             rideOrReturnButton?.setTitleColor(.gray, for: .disabled)
+            rideOrReturnButton?.isEnabled = enabled
         }
     }
     
@@ -554,6 +604,20 @@ class MapPageViewController: UIViewController, NMFMapViewTouchDelegate {
         var closerMarker: NMFMarker? = nil
         let maxDistance: CLLocationDistance = 150.0
         for marker in markerList {
+            let markerLocation = CLLocation(latitude: marker.position.lat, longitude: marker.position.lng)
+            let targetLocation = CLLocation(latitude: targetLatLng.lat, longitude: targetLatLng.lng)
+            let distance = markerLocation.distance(from: targetLocation)
+            if distance < maxDistance {
+                closerMarker = marker
+                break
+            }
+        }
+        return closerMarker
+    }
+    func findClosestAdditionalMarker(to targetLatLng: NMGLatLng) -> NMFMarker? {
+        var closerMarker: NMFMarker? = nil
+        let maxDistance: CLLocationDistance = 150.0
+        for marker in additionalMarker {
             let markerLocation = CLLocation(latitude: marker.position.lat, longitude: marker.position.lng)
             let targetLocation = CLLocation(latitude: targetLatLng.lat, longitude: targetLatLng.lng)
             let distance = markerLocation.distance(from: targetLocation)
@@ -625,10 +689,23 @@ class MapPageViewController: UIViewController, NMFMapViewTouchDelegate {
     }
 
     func removeMarkerAndMoveCamera(to position: NMGLatLng) {
-        if let touchedMarker = touchedMarker {
-            touchedMarker.mapView = nil
-            mapView.setNeedsDisplay()
-            mapView.moveCamera(NMFCameraUpdate(scrollTo: position))
+        for marker in markerList {
+            if (marker.position.lat == position.lat) && (marker.position.lng == position.lng)
+            {
+                marker.mapView = nil
+                if let touchedMarker = touchedMarker {
+                    touchedMarker.mapView = nil
+                    mapView.moveCamera(NMFCameraUpdate(scrollTo: position))
+                }
+            }
+            if (currentMarker?.position.lat == marker.position.lat) && (currentMarker?.position.lng == marker.position.lng )
+            {
+                marker.mapView = nil
+                if let touchedMarker = touchedMarker {
+                    touchedMarker.mapView = nil
+                    mapView.moveCamera(NMFCameraUpdate(scrollTo: position))
+                }
+            }
         }
     }
     

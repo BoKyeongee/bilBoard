@@ -8,7 +8,7 @@
 import UIKit
 import SwiftSMTP
 
-class SignUpPageViewController: UIViewController {
+class SignUpPageViewController: UIViewController, UITextFieldDelegate {
     
     
     @IBOutlet weak var nickNameValidationText: UILabel!
@@ -47,6 +47,10 @@ class SignUpPageViewController: UIViewController {
         //비밀번호 *로 표시
         pwTextField.isSecureTextEntry = true
         againPwTextField.isSecureTextEntry = true
+        
+        //강력한 암호 사용 추천 비활성화
+        pwTextField.passwordRules = nil
+        againPwTextField.passwordRules = nil
         
         //texttield마다 delegate 선언 -> 유효성 검사에 필요
         nickNameTextField.delegate = self
@@ -223,7 +227,10 @@ class SignUpPageViewController: UIViewController {
         againPwTextField.text = ""
         emailTextField.text = ""
         emailNumberTextField.text = ""
-        
+        emailNumberTextField.isHidden = false
+        emailTimeText.isHidden = false
+        verificationButton.isHidden = false
+        emailTimeText.isHidden = true
     }
     
     //텍스트 필드 입력 시 키보드 올라오는 기능
@@ -264,6 +271,16 @@ class SignUpPageViewController: UIViewController {
     
     //이메일 인증 버튼
     @IBAction func emailVerificationButton(_ sender: UIButton) {
+       
+        //이메일 형식에 대한 유효성 검사
+        guard let email = emailTextField.text, isValidEmail(email) else {
+                // 유효하지 않은 이메일 형식에 대한 처리 (예: 알림을 보여주기)
+            let alert = UIAlertController(title: "오류", message: "유효하지 않은 이메일 형식입니다.", preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "확인", style: .default, handler: nil))
+                    present(alert, animated: true)
+                print("유효하지 않은 이메일 형식입니다.")
+                return
+            }
         
         //smtp 로직
         let smtp = SMTP(hostname: "smtp.gmail.com", email: "user3rum@gmail.com", password: "ciihfefuexaihugu")
@@ -271,7 +288,7 @@ class SignUpPageViewController: UIViewController {
         let from = Mail.User(name:"BilBoard", email: "user3rum@gmail.com")
         let to = Mail.User(name: "User", email: emailTextField.text!)
         
-        let code = "\(Int.random(in: 000000...999999))"
+        let code = "\(Int.random(in: 100000...999999))"
         
         let mail = Mail(from: from, to: [to], subject: "[BILBOARD] E-MAIL VERIFICATION", text: "인증번호 \(code) \n" + "APP으로 돌아가 인증번호를 입력해주세요.")
         
@@ -291,6 +308,12 @@ class SignUpPageViewController: UIViewController {
             timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(updateTimerLabel), userInfo: nil, repeats: true)
         }
         
+    }
+    //이메일 형식에 대한 유효성 검사
+    func isValidEmail(_ email: String) -> Bool {
+        let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Z0-9a-z.-]+\\.[A-Za-z]{2,}"
+        let emailTest = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
+        return emailTest.evaluate(with: email)
     }
     
     @objc func updateTimerLabel() {
@@ -356,6 +379,34 @@ class SignUpPageViewController: UIViewController {
             return
         }
         
+       
+    
+        let userData: [String: Any] = [
+            "nickName": nickNameTextField.text!,
+            "id": idTextField.text!,
+            "password": pwTextField.text!,
+            "email": emailTextField.text!,
+            "currentLat": 37.481776875776,
+            "currentLng": 126.79742178525
+        ]
+        
+        func saveUserDataToUserDefaults() {
+           
+        
+            // userdefaults 에 딕셔너리 저장을 위해 NSCoding 프로토콜 변환
+            UserDefaults.standard.set(nickNameTextField.text, forKey: "nickname")
+            UserDefaults.standard.set(idTextField.text, forKey: "id")
+            UserDefaults.standard.set(pwTextField.text, forKey: "password")
+            UserDefaults.standard.set(emailTextField.text, forKey: "email")
+            UserDefaults.standard.set(37.481776875776, forKey: "currentLat")
+            UserDefaults.standard.set(126.79742178525, forKey: "currentLng")
+            
+        
+            UserDefaults.standard.set(userData, forKey: "userData")
+            
+            
+        }
+        
         showAlert(message: "회원가입이 완료되었습니다.", completion: {
             // 모든 유효성 검사를 통과한 경우, UserDefaults에 데이터 저장
             saveUserDataToUserDefaults()
@@ -363,28 +414,13 @@ class SignUpPageViewController: UIViewController {
             self.dismiss(animated: true, completion: nil)
             
         })
-    
         
-        func saveUserDataToUserDefaults() {
-            let userData: [String: String] = [
-                "nickName": nickNameTextField.text!,
-                "id": idTextField.text!,
-                "password": pwTextField.text!,
-                "email": emailTextField.text!
-            ]
-            
-            UserDefaults.standard.setValue(userData, forKey: "userData")
-        }
+        print("회원가입이 완료되었습니다. \(userData)")
     }
     
-//    func showAlert(message: String) {
-//        let alert = UIAlertController(title: "오류", message: message, preferredStyle: .alert)
-//        let okAction = UIAlertAction(title: "확인", style: .default, handler: nil)
-//        alert.addAction(okAction)
-//        present(alert, animated: true, completion: nil)
-//    }
-    func showAlert(message: String, completion: (() -> Void)? = nil) {
-        let alert = UIAlertController(title: nil, message: message, preferredStyle: .alert)
+    // 회원가입 정보 입력에 대한 alert message
+    func showAlert(title: String? = "오류", message: String, completion: (() -> Void)? = nil) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "확인", style: .default, handler: { _ in
             completion?()
         }))
@@ -393,9 +429,6 @@ class SignUpPageViewController: UIViewController {
     
 }
 
-extension SignUpPageViewController: UITextFieldDelegate {
-    
-}
 //UIView, 모든 하위 클래스에 findFirstResponder 메서드 추가
 extension UIView {
     func findFirstResponder() -> UIView? {

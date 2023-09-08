@@ -20,26 +20,51 @@ class BoardViewController: UIViewController {
     @IBOutlet weak var typeBox: UIView!
     @IBOutlet weak var idLabel: UILabel!
     @IBOutlet weak var topbar: UIView!
+    var markerList : [NMFMarker] = []
+    var projectionList : [NMFProjection] = []
     
-    func loadMap() {
-        let mapView = NMFMapView(frame: mapbox.frame)
+    func setupMarkerList(_ profile: UserInfo) {
+        if let bilBoardInfos = profile.bilBoardInfos {
+            for i in 0..<bilBoardInfos.count {
+                let lat = bilBoardInfos[i].lat
+                let lng = bilBoardInfos[i].lng
+                let marker = NMFMarker()
+                marker.iconTintColor = UIColor.blue
+                marker.position = NMGLatLng(lat: lat, lng: lng)
+                marker.captionColor = UIColor.blue
+                marker.captionHaloColor = .red
+                marker.captionText = String(bilBoardInfos[i].boardID)
+                marker.captionTextSize = 15
+                markerList.append(marker)
+            }
+        }
+    }
+    
+    func setupMarker(_ markerList: [NMFMarker]) {
+        let index = UserDefaults.standard.integer(forKey: "current")
+        let marker = markerList[index]
         
+        return marker.mapView = mapbox
+    }
+    
+    func loadMap(_ boardInfo: [BoardInfo]) {
+        let index = UserDefaults.standard.integer(forKey: "current")
+        
+        let lat = profile.bilBoardInfos![index].lat
+        let lng = profile.bilBoardInfos![index].lng
         view.addSubview(mapbox)
-        
-        let marker = NMFMarker()
-        marker.position = NMGLatLng(lat: 37.5670135, lng: 126.9783740)
-        marker.iconImage = NMF_MARKER_IMAGE_BLACK
-        marker.iconTintColor = UIColor.red
+        setupMarkerList(profile)
+        setupMarker(markerList)
+        let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: lat, lng: lng))
+        cameraUpdate.animation = .easeIn
+        mapbox.moveCamera(cameraUpdate)
     }
     
     func loadData() {
-        let boardInfo = [boardInfo1, boardInfo2, boardInfo3, boardInfo4]
         let index = UserDefaults.standard.integer(forKey: "current")
-        let data = boardInfo[index]
+        idLabel.text = "🔎 ID #" + String(profile.bilBoardInfos![index].boardID)
         
-        idLabel.text = "🔎 ID #" + String(data.boardID)
-        
-        switch data.boardType {
+        switch profile.bilBoardInfos![index].boardType {
         case BoardTypes.basic:
             typeLabel.text = "⭐️ basic ⭐️"
         case BoardTypes.premium:
@@ -54,11 +79,13 @@ class BoardViewController: UIViewController {
     }
     override func viewWillAppear(_ animated: Bool) {
         loadData()
-        loadMap()
+        loadMap(profile.bilBoardInfos!)
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        loadData()
+        loadMap(profile.bilBoardInfos!)
         
     }
     

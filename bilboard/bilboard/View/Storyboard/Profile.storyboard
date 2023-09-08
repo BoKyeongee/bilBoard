@@ -203,13 +203,6 @@
                                                             <nil key="textColor"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
-                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="시작/종료장소" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YBJ-VW-Tvk">
-                                                            <rect key="frame" x="244" y="8" width="83" height="18"/>
-                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                                            <nil key="textColor"/>
-                                                            <nil key="highlightedColor"/>
-                                                        </label>
                                                         <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1Cw-Gz-3Ih">
                                                             <rect key="frame" x="8" y="31" width="337" height="57"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -228,13 +221,6 @@
                                                                     <nil key="textColor"/>
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
-                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="총 00분 이용" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dXe-Ou-5RG">
-                                                                    <rect key="frame" x="260" y="35" width="69" height="16"/>
-                                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                                    <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                                                    <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                    <nil key="highlightedColor"/>
-                                                                </label>
                                                             </subviews>
                                                             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                         </view>
@@ -247,10 +233,8 @@
                                             <outlet property="dateLabel" destination="5Ro-Ja-gdA" id="hfU-iE-jFW"/>
                                             <outlet property="historyCellBox" destination="Ss9-ig-gsu" id="QIA-dX-lfb"/>
                                             <outlet property="historyContentBox" destination="1Cw-Gz-3Ih" id="jpy-8D-bfJ"/>
-                                            <outlet property="locateSummaryLabel" destination="YBJ-VW-Tvk" id="79D-7z-EtS"/>
                                             <outlet property="returnTimeLabel" destination="AMq-A0-hjw" id="v1S-M6-3lE"/>
                                             <outlet property="startTimeLabel" destination="yvh-Z0-DQV" id="0ZJ-f0-f7f"/>
-                                            <outlet property="usedTimeLabel" destination="dXe-Ou-5RG" id="NHy-gJ-318"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>

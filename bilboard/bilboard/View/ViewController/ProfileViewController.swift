@@ -102,7 +102,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
             historyCell.historyCellBox.backgroundColor = UIColor(named: "MainColor")
             historyCell.historyCellBox.layer.cornerRadius = 20
             historyCell.dateLabel.textColor = .white
-            historyCell.locateSummaryLabel.textColor = .white
+//            historyCell.locateSummaryLabel.textColor = .white
             
             historyCell.historyContentBox.backgroundColor = UIColor(named: "MildPurple")
             historyCell.historyContentBox.layer.cornerRadius = 15
@@ -153,6 +153,8 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         
         tableView.reloadData()
         tableView.setNeedsDisplay()
+        
+        UserDefaults.standard.removeObject(forKey: "current")
 }
 
 

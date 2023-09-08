@@ -39,10 +39,7 @@ class SignUpPageViewController: UIViewController, UITextFieldDelegate {
             label.isHidden = true
         }
         emailTimeText.isHidden = true
-        
-        //자동완성 비활성화
-        nickNameTextField.autocorrectionType = .no
-        idTextField.autocorrectionType = .no
+
         
         //비밀번호 *로 표시
         pwTextField.isSecureTextEntry = true
@@ -103,6 +100,7 @@ class SignUpPageViewController: UIViewController, UITextFieldDelegate {
             let isVaildPattern = (nickNameTextField.text!.range(of: idPattern, options: .regularExpression) != nil)
             if isVaildPattern {
                 nickNameValidationText.text = "조건에 맞는 닉네임"
+                nickNameValidationText.textColor = .green
                 nickNameValidationText.isHidden = true
             } else {
                 nickNameValidationText.text = "한글만 작성할 수 있습니다."
@@ -139,6 +137,7 @@ class SignUpPageViewController: UIViewController, UITextFieldDelegate {
             let isValidPattern = (userWord!.range(of: idPattern, options: .regularExpression) != nil)
             if isValidPattern {
                 idValidationText.text = "조건에 맞는 아이디"
+                idValidationText.textColor = .green
                 idValidationText.isHidden = true
             } else {
                 idValidationText.text = "소문자와 숫자만 사용할 수 있습니다."
@@ -174,6 +173,7 @@ class SignUpPageViewController: UIViewController, UITextFieldDelegate {
             let isVaildPattern = (pwTextField.text!.range(of: idPattern, options: .regularExpression) != nil)
             if isVaildPattern {
                 pwValidationText.text = "조건에 맞는 비밀번호"
+                pwValidationText.textColor = .green
                 pwValidationText.isHidden = true
             } else {
                 pwValidationText.text = "영어알파벳, 숫자, 특수문자가 필수로 입력되어야 합니다."
@@ -386,8 +386,8 @@ class SignUpPageViewController: UIViewController, UITextFieldDelegate {
             "id": idTextField.text!,
             "password": pwTextField.text!,
             "email": emailTextField.text!,
-            "currentLat": 37.481776875776,
-            "currentLng": 126.79742178525
+            "currentLat": 37.498454829578186,
+            "currentLng": 127.02807957409829
         ]
         
         func saveUserDataToUserDefaults() {
@@ -398,8 +398,8 @@ class SignUpPageViewController: UIViewController, UITextFieldDelegate {
             UserDefaults.standard.set(idTextField.text, forKey: "id")
             UserDefaults.standard.set(pwTextField.text, forKey: "password")
             UserDefaults.standard.set(emailTextField.text, forKey: "email")
-            UserDefaults.standard.set(37.481776875776, forKey: "currentLat")
-            UserDefaults.standard.set(126.79742178525, forKey: "currentLng")
+            UserDefaults.standard.set(37.498454829578186, forKey: "currentLat")
+            UserDefaults.standard.set(127.02807957409829, forKey: "currentLng")
             
         
             UserDefaults.standard.set(userData, forKey: "userData")
@@ -419,7 +419,7 @@ class SignUpPageViewController: UIViewController, UITextFieldDelegate {
     }
     
     // 회원가입 정보 입력에 대한 alert message
-    func showAlert(title: String? = "오류", message: String, completion: (() -> Void)? = nil) {
+    func showAlert(title: String? = "알림", message: String, completion: (() -> Void)? = nil) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "확인", style: .default, handler: { _ in
             completion?()

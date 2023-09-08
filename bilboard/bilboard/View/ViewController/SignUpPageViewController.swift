@@ -386,8 +386,8 @@ class SignUpPageViewController: UIViewController, UITextFieldDelegate {
             "id": idTextField.text!,
             "password": pwTextField.text!,
             "email": emailTextField.text!,
-            "currentLat": 37.481776875776,
-            "currentLng": 126.79742178525
+            "currentLat": 37.498454829578186,
+            "currentLng": 127.02807957409829
         ]
         
         func saveUserDataToUserDefaults() {
@@ -398,8 +398,8 @@ class SignUpPageViewController: UIViewController, UITextFieldDelegate {
             UserDefaults.standard.set(idTextField.text, forKey: "id")
             UserDefaults.standard.set(pwTextField.text, forKey: "password")
             UserDefaults.standard.set(emailTextField.text, forKey: "email")
-            UserDefaults.standard.set(37.481776875776, forKey: "currentLat")
-            UserDefaults.standard.set(126.79742178525, forKey: "currentLng")
+            UserDefaults.standard.set(37.498454829578186, forKey: "currentLat")
+            UserDefaults.standard.set(127.02807957409829, forKey: "currentLng")
             
         
             UserDefaults.standard.set(userData, forKey: "userData")

@@ -19,9 +19,9 @@ let history1 = History(historyID: 1, startTime: "2023-09-04 10:00:00", endTime: 
 
 let history2 = History(historyID: 2, startTime: "2023-09-05 14:30:00", endTime: "2023-09-05 16:30:00", startLat: 37.789, startLong: 127.123, endLat: 38.012, endLong: 127.456, useDate: "2023-09-05", bilBoardID: 102)
 
-let boardInfo1 = BoardInfo(address: "서울시 강남구", boardType: BoardTypes.premium, boardID: 1001, registerTime: "2023-09-04 09:30:00", lat: 37.498454829578186, lng : 127.02807957409829)
+let boardInfo1 = BoardInfo(address: "부천시 중동", boardType: BoardTypes.premium, boardID: 1001, registerTime: "2023-09-04 09:30:00", lat: 37.49426290218334, lng : 126.77814658950003)
 
-let boardInfo2 = BoardInfo(address: "서울시 강남구", boardType: BoardTypes.basic, boardID: 1002, registerTime: "2023-09-05 10:45:00",  lat: 37.49786006249778, lng : 127.02850907967961)
+let boardInfo2 = BoardInfo(address: "서울시 강남구", boardType: BoardTypes.basic, boardID: 1002, registerTime: "2023-09-05 10:45:00",  lat: 37.495138607717315, lng : 126.770793665122)
 
 let boardInfo3 = BoardInfo(address: "성남시 분당구", boardType: BoardTypes.basic, boardID: 1003, registerTime: "2023-09-05 15:23:00",  lat: 37.35969929901283, lng : 127.10578995996839)
 
@@ -53,8 +53,8 @@ var profile = UserInfo(
     isLogin: false,
     usageHistory: [history1, history2],
     bilBoardInfos: [boardInfo1, boardInfo2, boardInfo3, boardInfo4, boardInfo5, boardInfo6, boardInfo7, boardInfo8,boardInfo9, boardInfo10, boardInfo11, boardInfo12],
-    currentLat: 37.498454829578186,
-    currentLng: 127.02807957409829,
+    currentLat: 37.49906045305895,
+    currentLng: 126.76517251537199,
     profileImgName: "profile-pic"
 )
 

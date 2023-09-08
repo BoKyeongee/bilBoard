@@ -12,7 +12,7 @@
         <!--Login View Controller-->
         <scene sceneID="Hls-Xr-99a">
             <objects>
-                <viewController storyboardIdentifier="loginViewControllerID" id="xDS-oC-iOA" customClass="LoginViewController" customModule="bilboard" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="loginViewControllerID" useStoryboardIdentifierAsRestorationIdentifier="YES" id="xDS-oC-iOA" customClass="LoginViewController" customModule="bilboard" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="411-r2-Gd0">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

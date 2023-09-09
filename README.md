@@ -11,14 +11,33 @@
   내용물
 
 ![simulator_screen_recording_-_iphone_14_pro_-_2023-09-08_at_13 57 41](https://github.com/BoKyeongee/bilBoard/assets/49290883/6ebf184c-db9b-4f14-b065-77b57c41f0d6)  
-주소 검색을 통한 지도 카메라 이동 및 퀵보드 추가
+메인화면: 주소 검색을 통한 지도 카메라 이동 및 킥보드 추가
 </br></br></br>
 ![Simulator-Screen-Recording-iPhone-14-Pro-2023-09-08-at-14 27 45](https://github.com/BoKyeongee/bilBoard/assets/49290883/3cbba156-0850-48fd-8407-582463c6fe7e)   
-메인화면 자동 길찾기
-
+메인화면: 자동 길찾기
 
 ![smtp](https://github.com/BoKyeongee/bilBoard/assets/49290883/7ede7f41-cd90-4f1f-a741-d24084f7d97e)
 회원가입시 메일 인증
+
+
+![킥보드 이용시 추가](https://github.com/BoKyeongee/bilBoard/assets/124825477/4c6c3ee6-6b65-4be8-bce8-62e0b822a1a2)
+프로필 화면: 킥보드 이용 시 history 기록 추가
+
+
+![킥보드 추가](https://github.com/BoKyeongee/bilBoard/assets/124825477/0fc4e0eb-ca15-4937-a5ab-3985cfb932b2)
+프로필 화면: 킥보드 추가 시 cell에 추가
+
+
+![삭제](https://github.com/BoKyeongee/bilBoard/assets/124825477/5f78fbe6-5026-472d-b230-fb803e604505)
+프로필 화면: 킥보드 데이터 삭제
+
+
+![편집](https://github.com/BoKyeongee/bilBoard/assets/124825477/98413707-6a10-4d27-9379-8d9d57a5c688)
+프로필 화면: 킥보드 데이터 수정
+
+
+![미설정시 프로필](https://github.com/BoKyeongee/bilBoard/assets/124825477/35e55d6b-4ede-43ea-84fe-1040a812f5ce)
+프로필 화면: 가입 후 프로필 미설정 시 기본 프로필 사진
 
 </div>
 

@@ -39,6 +39,7 @@
 		DC23B6102AA7807100D0E048 /* CollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC23B60F2AA7807100D0E048 /* CollectionViewCell.swift */; };
 		DC23B6122AA78F2E00D0E048 /* HistoryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC23B6112AA78F2E00D0E048 /* HistoryTableViewCell.swift */; };
 		DCB830B02AA7F33E000175E7 /* BoardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCB830AF2AA7F33E000175E7 /* BoardViewController.swift */; };
+		DCBE97D62AACAA34005C47C4 /* EditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCBE97D52AACAA34005C47C4 /* EditViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -76,6 +77,7 @@
 		DC23B60F2AA7807100D0E048 /* CollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewCell.swift; sourceTree = "<group>"; };
 		DC23B6112AA78F2E00D0E048 /* HistoryTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryTableViewCell.swift; sourceTree = "<group>"; };
 		DCB830AF2AA7F33E000175E7 /* BoardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardViewController.swift; sourceTree = "<group>"; };
+		DCBE97D52AACAA34005C47C4 /* EditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditViewController.swift; sourceTree = "<group>"; };
 		F10DB0D3FBD186E9D6E777C6 /* Pods-bilboard.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-bilboard.debug.xcconfig"; path = "Target Support Files/Pods-bilboard/Pods-bilboard.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -128,6 +130,7 @@
 				DC23B60F2AA7807100D0E048 /* CollectionViewCell.swift */,
 				DC23B6112AA78F2E00D0E048 /* HistoryTableViewCell.swift */,
 				DCB830AF2AA7F33E000175E7 /* BoardViewController.swift */,
+				DCBE97D52AACAA34005C47C4 /* EditViewController.swift */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -363,6 +366,7 @@
 				C07D62D42AA5A6A200E2F447 /* SceneDelegate.swift in Sources */,
 				C0DA0C982AA5D5E60027A097 /* UserInfo.swift in Sources */,
 				DC23B6122AA78F2E00D0E048 /* HistoryTableViewCell.swift in Sources */,
+				DCBE97D62AACAA34005C47C4 /* EditViewController.swift in Sources */,
 				DC23B60C2AA7761900D0E048 /* ProfileTableViewCell.swift in Sources */,
 				DCB830B02AA7F33E000175E7 /* BoardViewController.swift in Sources */,
 				DC23B6102AA7807100D0E048 /* CollectionViewCell.swift in Sources */,

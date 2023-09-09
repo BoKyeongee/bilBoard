@@ -9,7 +9,6 @@ import UIKit
 
 class CollectionTableViewCell: UITableViewCell, UICollectionViewDelegate, UICollectionViewDataSource {
 
-    @IBOutlet weak var emptyLabel: UILabel!
     @IBOutlet weak var collectionView: UICollectionView!
     
     override func awakeFromNib() {

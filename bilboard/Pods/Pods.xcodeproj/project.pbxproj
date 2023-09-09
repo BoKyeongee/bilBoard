@@ -16,6 +16,9 @@
 			dependencies = (
 			);
 			name = NMapsGeometry;
+			packageProductDependencies = (
+				DCBE97DB2AACE98B005C47C4 /* SwiftyJSON */,
+			);
 			productName = NMapsGeometry;
 		};
 		8E049F5F4E3BDC647F924FEF22D49D90 /* NMapsMap */ = {
@@ -448,6 +451,9 @@
 		BFDFE7DC352907FC980B868725387E98 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				KnownAssetTags = (
+					New,
+				);
 				LastSwiftUpdateCheck = 1300;
 				LastUpgradeCheck = 1300;
 			};
@@ -460,6 +466,9 @@
 				en,
 			);
 			mainGroup = CF1408CF629C7361332E53B88F7BD30C;
+			packageReferences = (
+				DCBE97DA2AACE98B005C47C4 /* XCRemoteSwiftPackageReference "SwiftyJSON" */,
+			);
 			productRefGroup = 20E14FCD62379F8115F2AF2CF14A330F /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -998,6 +1007,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		DCBE97DA2AACE98B005C47C4 /* XCRemoteSwiftPackageReference "SwiftyJSON" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SwiftyJSON/SwiftyJSON.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		DCBE97DB2AACE98B005C47C4 /* SwiftyJSON */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DCBE97DA2AACE98B005C47C4 /* XCRemoteSwiftPackageReference "SwiftyJSON" */;
+			productName = SwiftyJSON;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = BFDFE7DC352907FC980B868725387E98 /* Project object */;
 }

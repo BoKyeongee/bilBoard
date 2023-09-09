@@ -129,12 +129,13 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        
+        let index = UserDefaults.standard.integer(forKey: "current")
+
         let collectionCell = tableView.dequeueReusableCell(withIdentifier: "collectionCell") as! CollectionTableViewCell
-        tableView.reloadData()
-        collectionCell.collectionView.reloadData()
-        collectionCell.setNeedsDisplay()
         
+        collectionCell.setNeedsDisplay()
+        collectionCell.collectionView.reloadData()
+        tableView.reloadData()
     }
     
     override func viewDidLoad() {
@@ -150,6 +151,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         tableView.setNeedsDisplay()
         
         UserDefaults.standard.removeObject(forKey: "current")
+        
 }
 
 

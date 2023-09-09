@@ -7,7 +7,15 @@
 
 import UIKit
 
-class CollectionTableViewCell: UITableViewCell, UICollectionViewDelegate, UICollectionViewDataSource {
+class CollectionTableViewCell: UITableViewCell, UICollectionViewDelegate, UICollectionViewDataSource, UpdateData {
+    
+    func updateData(_ newBoardInfo: BoardInfo) {
+        let boardCell = collectionView.dequeueReusableCell(withReuseIdentifier: "boardCell", for: IndexPath()) as! CollectionViewCell
+        boardCell.setNeedsDisplay()
+        
+        boardCell.setData(newBoardInfo)
+    }
+    
 
     @IBOutlet weak var collectionView: UICollectionView!
     

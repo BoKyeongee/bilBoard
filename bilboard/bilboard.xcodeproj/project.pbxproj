@@ -40,6 +40,8 @@
 		DC23B6122AA78F2E00D0E048 /* HistoryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC23B6112AA78F2E00D0E048 /* HistoryTableViewCell.swift */; };
 		DCB830B02AA7F33E000175E7 /* BoardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCB830AF2AA7F33E000175E7 /* BoardViewController.swift */; };
 		DCBE97D62AACAA34005C47C4 /* EditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCBE97D52AACAA34005C47C4 /* EditViewController.swift */; };
+		DCBE97D92AACE94F005C47C4 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = DCBE97D82AACE94F005C47C4 /* Alamofire */; };
+		DCBE97DE2AACE9B0005C47C4 /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = DCBE97DD2AACE9B0005C47C4 /* SwiftyJSON */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -86,7 +88,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DCBE97D92AACE94F005C47C4 /* Alamofire in Frameworks */,
 				3BA265182AA892E100E4663F /* SwiftSMTP in Frameworks */,
+				DCBE97DE2AACE9B0005C47C4 /* SwiftyJSON in Frameworks */,
 				975230C801BEC377FA423E99 /* Pods_bilboard.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -244,6 +248,8 @@
 			name = bilboard;
 			packageProductDependencies = (
 				3BA265172AA892E100E4663F /* SwiftSMTP */,
+				DCBE97D82AACE94F005C47C4 /* Alamofire */,
+				DCBE97DD2AACE9B0005C47C4 /* SwiftyJSON */,
 			);
 			productName = bilboard;
 			productReference = C07D62CE2AA5A6A200E2F447 /* bilboard.app */;
@@ -275,6 +281,8 @@
 			mainGroup = C07D62C52AA5A6A200E2F447;
 			packageReferences = (
 				3BA265162AA892E100E4663F /* XCRemoteSwiftPackageReference "Swift-SMTP" */,
+				DCBE97D72AACE94F005C47C4 /* XCRemoteSwiftPackageReference "Alamofire" */,
+				DCBE97DC2AACE9B0005C47C4 /* XCRemoteSwiftPackageReference "SwiftyJSON" */,
 			);
 			productRefGroup = C07D62CF2AA5A6A200E2F447 /* Products */;
 			projectDirPath = "";
@@ -604,6 +612,22 @@
 				minimumVersion = 6.0.0;
 			};
 		};
+		DCBE97D72AACE94F005C47C4 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.0;
+			};
+		};
+		DCBE97DC2AACE9B0005C47C4 /* XCRemoteSwiftPackageReference "SwiftyJSON" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SwiftyJSON/SwiftyJSON.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -611,6 +635,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 3BA265162AA892E100E4663F /* XCRemoteSwiftPackageReference "Swift-SMTP" */;
 			productName = SwiftSMTP;
+		};
+		DCBE97D82AACE94F005C47C4 /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DCBE97D72AACE94F005C47C4 /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
+		};
+		DCBE97DD2AACE9B0005C47C4 /* SwiftyJSON */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DCBE97DC2AACE9B0005C47C4 /* XCRemoteSwiftPackageReference "SwiftyJSON" */;
+			productName = SwiftyJSON;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

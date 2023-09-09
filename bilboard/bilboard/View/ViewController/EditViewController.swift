@@ -19,9 +19,7 @@ protocol UpdateData: AnyObject {
 class EditViewController: UIViewController, UpdateAddress {
     
     var delegate: UpdateData?
-    
     var tempData: [String:Any] = [:]
-    let index = UserDefaults.standard.integer(forKey: "current")
     
     func updateAddress(_ newAddress: String) {
         addressLabel.text = newAddress
@@ -58,7 +56,7 @@ class EditViewController: UIViewController, UpdateAddress {
     @IBAction func save(_ sender: Any) {
         // 데이터 저장
         // 주소 -> 좌표 decoding 필요
-        
+        let index = UserDefaults.standard.integer(forKey: "current")
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
         let strCurrentDate = formatter.string(from: Date())
@@ -78,6 +76,7 @@ class EditViewController: UIViewController, UpdateAddress {
             originData = newInfo
             print(originData)
             delegate?.updateData(newInfo)
+            profile.bilBoardInfos![index] = newInfo
             self.navigationController?.popViewController(animated: true)
             return
         }
@@ -90,6 +89,7 @@ class EditViewController: UIViewController, UpdateAddress {
         originData = newInfo
         print(newInfo)
         delegate?.updateData(newInfo)
+        profile.bilBoardInfos![index] = newInfo
         self.navigationController?.popViewController(animated: true)
         return
     }

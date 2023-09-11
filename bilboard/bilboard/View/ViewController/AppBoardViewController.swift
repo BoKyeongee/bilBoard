@@ -210,7 +210,7 @@ class AppBoardViewController: UIViewController, UIPickerViewDelegate, UIPickerVi
        if profile.bilBoardInfos == nil {
         profile.bilBoardInfos = []
        }
-       let boardID = (profile.bilBoardInfos?.count ?? 0) + 1
+          let boardID = (profile.bilBoardInfos?.last?.boardID ?? 1000) + 1
        if tfType.text == "basic" {
         profile.bilBoardInfos!.append(BoardInfo(address: tfAddress.text!, boardType: .basic, boardID: boardID, registerTime: Date().GetCurrentTime(), lat: latitude, lng: longitude))
        } else if tfType.text == "premium" {

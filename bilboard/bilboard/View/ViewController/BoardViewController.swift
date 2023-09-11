@@ -11,66 +11,94 @@ import NMapsGeometry
 
 class BoardViewController: UIViewController {
 
+    @IBOutlet weak var menuButton: UIButton!
     @IBOutlet weak var mapbox: NMFMapView!
-    @IBOutlet weak var detailAddress: UILabel!
     @IBOutlet weak var registerDate: UILabel!
-    @IBOutlet weak var address1: UILabel!
-    @IBOutlet weak var infoBox: UIView!
+    @IBOutlet weak var address: UILabel!
     @IBOutlet weak var typeLabel: UILabel!
     @IBOutlet weak var typeBox: UIView!
     @IBOutlet weak var idLabel: UILabel!
     @IBOutlet weak var topbar: UIView!
     
-    func loadMap() {
-        let mapView = NMFMapView(frame: mapbox.frame)
-        
+    var projectionList : [NMFProjection] = []
+    
+    func loadMap(_ boardInfo: BoardInfo) {
+        let lat = boardInfo.lat
+        let lng = boardInfo.lng
         view.addSubview(mapbox)
-        
         let marker = NMFMarker()
-        marker.position = NMGLatLng(lat: 37.5670135, lng: 126.9783740)
-        marker.iconImage = NMF_MARKER_IMAGE_BLACK
-        marker.iconTintColor = UIColor.red
+        marker.iconImage = NMFOverlayImage(name: "pin")
+        marker.width = CGFloat(50)
+        marker.height = CGFloat(75)
+        marker.position = NMGLatLng(lat: lat, lng: lng)
+        marker.captionColor = UIColor(named: "MainColor")!
+        marker.captionText = "🛴 " + String(boardInfo.boardID)
+        marker.captionTextSize = 20
+        marker.mapView = mapbox
+        let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: lat, lng: lng))
+        cameraUpdate.animation = .easeIn
+        mapbox.moveCamera(cameraUpdate)
     }
     
-    func loadData() {
-        let boardInfo = [boardInfo1, boardInfo2, boardInfo3, boardInfo4]
-        let index = UserDefaults.standard.integer(forKey: "current")
-        let data = boardInfo[index]
+    func showMenu() {
+        let edit = UIAction(title: "편집", image: UIImage(systemName: "pencil.line"),handler: { _ in
+            let editViewControllerID = UIStoryboard(name: "Profile", bundle: .none).instantiateViewController(identifier: "editViewControllerID") as! EditViewController
+            self.navigationController?.pushViewController(editViewControllerID, animated: true)
+        })
+        let delete = UIAction(title: "삭제", image: UIImage(systemName: "trash"), attributes: .destructive, handler: { _ in
+            let popup = UIAlertController(title: "삭제 확인", message: "정말로 정보를 삭제하시겠습니까?", preferredStyle: .alert)
+            let cancel = UIAlertAction(title: "취소", style: .cancel)
+            let confirmDelete = UIAlertAction(title: "확인", style: .default) { _ in
+                // 클릭 시 처리할 내용 (boardInfo 삭제)
+                print("click trash")
+                let index = UserDefaults.standard.integer(forKey: "current")
+                profile.bilBoardInfos!.remove(at: index)
+                self.navigationController?.popViewController(animated: true)
+            }
+            popup.addAction(cancel)
+            popup.addAction(confirmDelete)
+            self.present(popup, animated: true)
+        })
         
-        idLabel.text = "🔎 ID #" + String(data.boardID)
+        let menu = UIMenu(title: "", options: .singleSelection, children: [edit, delete])
+        menuButton.menu = menu
+        menuButton.showsMenuAsPrimaryAction = true
         
-        switch data.boardType {
+    }
+    
+    func loadData(_ boardInfo: BoardInfo) {
+        idLabel.text = "🔎 ID #" + String(boardInfo.boardID)
+        
+        switch boardInfo.boardType {
         case BoardTypes.basic:
             typeLabel.text = "⭐️ basic ⭐️"
         case BoardTypes.premium:
             typeLabel.text = "👑 premium 👑"
         }
-        
+        address.text = boardInfo.address
+        registerDate.text = boardInfo.registerTime
         typeBox.backgroundColor = UIColor(named: "MildPurple")
         typeBox.layer.cornerRadius = 14
-        
         mapbox.layer.cornerRadius = 20
-        
     }
+    
+    @IBAction func back(_ sender: Any) {
+        navigationController?.popViewController(animated: true)
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
-        loadData()
-        loadMap()
+        let index = UserDefaults.standard.integer(forKey: "current")
+
+        loadData(profile.bilBoardInfos![index])
+        loadMap(profile.bilBoardInfos![index])
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        let index = UserDefaults.standard.integer(forKey: "current")
+
+        loadData(profile.bilBoardInfos![index])
+        loadMap(profile.bilBoardInfos![index])
+        showMenu()
     }
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }

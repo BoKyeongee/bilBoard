@@ -10,7 +10,7 @@
         <!--Tab Bar Controller-->
         <scene sceneID="jnL-zB-ePT">
             <objects>
-                <tabBarController storyboardIdentifier="MainPageID" id="AaE-hk-t7w" sceneMemberID="viewController">
+                <tabBarController id="AaE-hk-t7w" sceneMemberID="viewController">
                     <navigationItem key="navigationItem" id="KbY-yO-vit"/>
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="a2V-BA-Kqp">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="49"/>
@@ -65,7 +65,7 @@
         <!--Navigation Controller-->
         <scene sceneID="V2O-xz-TNU">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" navigationBarHidden="YES" id="NHi-TB-eh8" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="MainPageID" automaticallyAdjustsScrollViewInsets="NO" useStoryboardIdentifierAsRestorationIdentifier="YES" navigationBarHidden="YES" id="NHi-TB-eh8" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="Soi-2F-ZBB">
                         <autoresizingMask key="autoresizingMask"/>

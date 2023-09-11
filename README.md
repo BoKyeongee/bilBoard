@@ -48,7 +48,7 @@
 개발언어 : 
 <img src="https://img.shields.io/badge/Swift-F05138?style=for-the-badge&logo=Swift&logoColor=white">   
 사용 기술 :  <img src="https://img.shields.io/badge/Urlsession-E60012?style=for-the-badge&logo=asciidoctor&logoColor=white"><img src="https://img.shields.io/badge/userdefaults-58B7FE?style=for-the-badge&logo=asciidoctor&logoColor=white">  
-외부라이브러리 모듈 : <img src="https://img.shields.io/badge/SMTP-00CEC8?style=for-the-badge&logo=spreadshirt&logoColor=white"><img src="https://img.shields.io/badge/Snapkit-6264A7?style=for-the-badge&logo=snapcraft&logoColor=white"><img src="https://img.shields.io/badge/NMapsMap-6332F6?style=for-the-badge&logo=asciidoctor&logoColor=white">
+외부라이브러리 모듈 : <img src="https://img.shields.io/badge/SwiftSMTP-00CEC8?style=for-the-badge&logo=spreadshirt&logoColor=white"><img src="https://img.shields.io/badge/Snapkit-6264A7?style=for-the-badge&logo=snapcraft&logoColor=white"><img src="https://img.shields.io/badge/NMapsMap-6332F6?style=for-the-badge&logo=asciidoctor&logoColor=white">
 
 
 

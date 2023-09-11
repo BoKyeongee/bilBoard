@@ -126,10 +126,13 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
             profile.isLogin = false
             let loginViewControllerID = UIStoryboard(name: "SignInPage", bundle: .none).instantiateViewController(identifier: "loginViewControllerID") as! LoginViewController
             navigationController?.pushViewController(loginViewControllerID, animated: true)
+            UserDefaults.standard.set(false, forKey: "isLogin")
         }
         popup.addAction(cancel)
         popup.addAction(logout)
         self.present(popup, animated: true)
+        
+
     }
     
     override func viewWillAppear(_ animated: Bool) {

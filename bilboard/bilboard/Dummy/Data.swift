@@ -7,14 +7,6 @@
 
 import Foundation
 
-//class Data {
-//    static let shared = Data()
-//
-//    private init() {}
-//}
-
-
-
 let history1 = History(historyID: 1, startTime: "2023-09-04 10:00", endTime: "2023-09-04 12:00", startLat: 37.123, startLong: 126.456, endLat: 37.456, endLong: 126.789, useDate: "2023-09-04", bilBoardID: 101)
 
 let history2 = History(historyID: 2, startTime: "2023-09-05 14:30", endTime: "2023-09-05 16:30", startLat: 37.789, startLong: 127.123, endLat: 38.012, endLong: 127.456, useDate: "2023-09-05", bilBoardID: 102)

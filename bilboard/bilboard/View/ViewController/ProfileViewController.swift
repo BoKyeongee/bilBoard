@@ -97,16 +97,12 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
             let historyCell = tableView.dequeueReusableCell(withIdentifier: "historyCell") as! HistoryTableViewCell
             
             historyCell.setData(profile.usageHistory![indexPath.row])
-            
             historyCell.selectionStyle = .none
             historyCell.historyCellBox.backgroundColor = UIColor(named: "MainColor")
             historyCell.historyCellBox.layer.cornerRadius = 20
             historyCell.dateLabel.textColor = .white
-            historyCell.locateSummaryLabel.textColor = .white
-            
             historyCell.historyContentBox.backgroundColor = UIColor(named: "MildPurple")
             historyCell.historyContentBox.layer.cornerRadius = 15
-            
             
             return historyCell
         default:
@@ -136,12 +132,13 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        
+        let index = UserDefaults.standard.integer(forKey: "current")
+
         let collectionCell = tableView.dequeueReusableCell(withIdentifier: "collectionCell") as! CollectionTableViewCell
-        tableView.reloadData()
-        collectionCell.collectionView.reloadData()
-        collectionCell.setNeedsDisplay()
         
+        collectionCell.setNeedsDisplay()
+        collectionCell.collectionView.reloadData()
+        tableView.reloadData()
     }
     
     override func viewDidLoad() {
@@ -153,9 +150,11 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         
         // tableView 줄 없앰
         tableView.separatorStyle = UITableViewCell.SeparatorStyle.none
-        
         tableView.reloadData()
         tableView.setNeedsDisplay()
+        
+        UserDefaults.standard.removeObject(forKey: "current")
+        
 }
 
 

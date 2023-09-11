@@ -9,5 +9,7 @@ target 'bilboard' do
 
 pod 'NMapsMap'
 pod 'SnapKit', '~> 5.0.1'
+pod 'Alamofire', '~> 5.8'
+pod 'SwiftyJSON', '~> 5.0'
 
 end
